@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:on_night/on_night_icons_icons.dart';
 
 void main() {
   runApp(MyApp());
@@ -6,6 +8,7 @@ void main() {
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
+  //https://svgsilh.com/svg/868813.svg
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -99,30 +102,66 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       body: Center(
-        child:_widgetOptions.elementAt(_selectedIndex),
+        child: Center(child: SvgPicture.asset(
+        'assets/DartmouthSocial.svg',
+        width: 200,
+        height: 200,
+        semanticsLabel: 'Fracket',
+        ),),
+
       ),
 
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
-        items: const <BottomNavigationBarItem>[
+        items:  <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.cloud),
+            icon: Container(
+              child: SvgPicture.asset(
+                'assets/fracket.svg',
+                width: 24,
+                height: 24,
+              ),
+            ),
             title: Text('Frackets'),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.group),
+              icon: Container(
+                child: SvgPicture.asset(
+                  'assets/DartmouthSocial.svg',
+                  width: 24,
+                  height: 24,
+                ),
+              ),
             title: Text('Social')
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.map),
+            icon: Container(
+              child: SvgPicture.asset(
+                'assets/Map.svg',
+                width: 24,
+                height: 24,
+              ),
+            ),
             title: Text('Map'),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.calendar_today),
+            icon: Container(
+              child: SvgPicture.asset(
+                'assets/Calendar.svg',
+                width: 24,
+                height: 24,
+              ),
+            ),
             title: Text('Calendar'),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.person_outline),
+            icon: Container(
+              child: SvgPicture.asset(
+                'assets/profile.svg',
+                width: 24,
+                height: 24,
+              ),
+            ),
             title: Text('Profile'),
           ),
         ],
