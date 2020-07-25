@@ -73,6 +73,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
+          alignment: Alignment.bottomCenter,
           children: <Widget>[
             WebView(
               initialUrl: 'https://onnight-1403b.web.app/',

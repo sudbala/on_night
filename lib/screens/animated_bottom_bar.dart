@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
 class AnimatedAppBar extends StatefulWidget implements PreferredSizeWidget{
-  final double _preferredHeight = 90.0
+  final double _preferredHeight = 90.0;
 
   @override
   _AnimatedAppBarState createState() => _AnimatedAppBarState();
 
   @override
   // TODO: implement preferredSize
-  Size get preferredSize => Size.fromHeight(_preferredHeight)
+  Size get preferredSize => Size.fromHeight(_preferredHeight);
 }
 
 class _AnimatedAppBarState extends State<AnimatedAppBar> with SingleTickerProviderStateMixin{
