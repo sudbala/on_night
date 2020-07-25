@@ -59,69 +59,73 @@ class _HomePageState extends State<HomePage> {
         // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
       ),
-      body: WebView(
-        initialUrl: 'https://onnight-1403b.web.app/',
-        javascriptMode: JavascriptMode.unrestricted,
-        onWebViewCreated: (WebViewController controller) {
-          _controller.complete(controller);
-        },
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        items: <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Container(
-              child: SvgPicture.asset(
-                'assets/fracket.svg',
-                width: 24,
-                height: 24,
-              ),
-            ),
-            title: Text('Frackets'),
+      body: Stack(
+        children: <Widget>[
+          WebView(
+            initialUrl: 'https://onnight-1403b.web.app/',
+            javascriptMode: JavascriptMode.unrestricted,
+            onWebViewCreated: (WebViewController controller) {
+              _controller.complete(controller);
+            },
           ),
-          BottomNavigationBarItem(
-              icon: Container(
-                child: SvgPicture.asset(
-                  'assets/DartmouthSocial.svg',
-                  width: 24,
-                  height: 24,
+          BottomNavigationBar(
+            type: BottomNavigationBarType.fixed,
+            items: <BottomNavigationBarItem>[
+              BottomNavigationBarItem(
+                icon: Container(
+                  child: SvgPicture.asset(
+                    'assets/fracket.svg',
+                    width: 24,
+                    height: 24,
+                  ),
                 ),
+                title: Text('Frackets'),
               ),
-              title: Text('Social')),
-          BottomNavigationBarItem(
-            icon: Container(
-              child: SvgPicture.asset(
-                'assets/Map.svg',
-                width: 24,
-                height: 24,
+              BottomNavigationBarItem(
+                  icon: Container(
+                    child: SvgPicture.asset(
+                      'assets/DartmouthSocial.svg',
+                      width: 24,
+                      height: 24,
+                    ),
+                  ),
+                  title: Text('Social')),
+              BottomNavigationBarItem(
+                icon: Container(
+                  child: SvgPicture.asset(
+                    'assets/Map.svg',
+                    width: 24,
+                    height: 24,
+                  ),
+                ),
+                title: Text('Map'),
               ),
-            ),
-            title: Text('Map'),
-          ),
-          BottomNavigationBarItem(
-            icon: Container(
-              child: SvgPicture.asset(
-                'assets/Calendar.svg',
-                width: 24,
-                height: 24,
+              BottomNavigationBarItem(
+                icon: Container(
+                  child: SvgPicture.asset(
+                    'assets/Calendar.svg',
+                    width: 24,
+                    height: 24,
+                  ),
+                ),
+                title: Text('Calendar'),
               ),
-            ),
-            title: Text('Calendar'),
-          ),
-          BottomNavigationBarItem(
-            icon: Container(
-              child: SvgPicture.asset(
-                'assets/profile.svg',
-                width: 24,
-                height: 24,
+              BottomNavigationBarItem(
+                icon: Container(
+                  child: SvgPicture.asset(
+                    'assets/profile.svg',
+                    width: 24,
+                    height: 24,
+                  ),
+                ),
+                title: Text('Profile'),
               ),
-            ),
-            title: Text('Profile'),
+            ],
+            currentIndex: _selectedIndex,
+            selectedItemColor: Colors.amber[800],
+            onTap: _onItemTapped,
           ),
         ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.amber[800],
-        onTap: _onItemTapped,
       ),
     );
   }
