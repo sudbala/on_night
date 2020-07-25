@@ -72,14 +72,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-        backgroundColor: darkCornColor,
-      ),
       body: Stack(
-          alignment: Alignment.bottomCenter,
           children: <Widget>[
             WebView(
               initialUrl: 'https://onnight-1403b.web.app/',
@@ -88,21 +81,76 @@ class _HomePageState extends State<HomePage> {
                 _controller.complete(controller);
               },
             ),
-            CurvedNavigationBar(
+            Align(
+              alignment: Alignment.topCenter,
+              child: SizedBox(
+                height: 70,
+                child: AppBar(
+                  // Here we take the value from the MyHomePage object that was created by
+                  // the App.build method, and use it to set our appbar title.
+                  title: Text(widget.title),
+                  actions: <Widget>[
+                    IconButton(
+                    icon: Icon(Icons.settings),
+                    color: Colors.white70)],
+                  backgroundColor: Colors.transparent,
+                ),
+              ),
+            ),
+            Align(
+                alignment: Alignment.bottomCenter,
+                child: CurvedNavigationBar(
               height: 50,
               backgroundColor: Colors.transparent,
               buttonBackgroundColor: Colors.purple,
 
               color: darkCornColor,
               items: <Widget>[
-                Icon(Icons.add, size: 30, color: Colors.white70),
-                Icon(Icons.list, size: 30, color: Colors.white70),
-                Icon(Icons.compare_arrows, size: 30, color: Colors.white70),
+                Container(
+                  child: SvgPicture.asset(
+                    'assets/fracket.svg',
+                    width: 40,
+                    height: 40,
+                    color: Colors.white70
+                  ),
+                ),
+                Container(
+                      child: SvgPicture.asset(
+                        'assets/DartmouthSocial.svg',
+                        width: 40,
+                        height: 40,
+                        color: Colors.white70
+                      ),
+                    ),
+                Container(
+                  child: SvgPicture.asset(
+                    'assets/Map.svg',
+                    width: 40,
+                    height: 40,
+                    color: Colors.white70
+                  ),
+                ),
+                Container(
+                  child: SvgPicture.asset(
+                    'assets/Calendar.svg',
+                    width: 40,
+                    height: 40,
+                    color: Colors.white70
+                  ),
+                ),
+                Container(
+                  child: SvgPicture.asset(
+                    'assets/profile.svg',
+                    width: 40,
+                    height: 40,
+                    color: Colors.white70,
+                  ),
+                )
               ],
               onTap: (index) {
                 //Handle button tap
               },
-            )
+            ))
           ]
       ),
     );

@@ -64,6 +64,7 @@ flutter:
     - assets/SocialNetwork.svg
     - assets/DartmouthCommunity.svg
     - assets/DartmouthSocial.svg
+    - assets/fluffy_fracket.svg
   # assets:
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
