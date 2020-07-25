@@ -104,46 +104,45 @@ class _HomePageState extends State<HomePage> {
               height: 50,
               backgroundColor: Colors.transparent,
               buttonBackgroundColor: Colors.purple,
-
               color: darkCornColor,
               items: <Widget>[
                 Container(
                   child: SvgPicture.asset(
                     'assets/fracket.svg',
-                    width: 40,
-                    height: 40,
+                    width: 32,
+                    height: 32,
                     color: Colors.white70
                   ),
                 ),
                 Container(
                       child: SvgPicture.asset(
                         'assets/DartmouthSocial.svg',
-                        width: 40,
-                        height: 40,
+                        width: 32,
+                        height: 32,
                         color: Colors.white70
                       ),
                     ),
                 Container(
                   child: SvgPicture.asset(
                     'assets/Map.svg',
-                    width: 40,
-                    height: 40,
+                    width: 32,
+                    height: 32,
                     color: Colors.white70
                   ),
                 ),
                 Container(
                   child: SvgPicture.asset(
                     'assets/Calendar.svg',
-                    width: 40,
-                    height: 40,
+                    width: 32,
+                    height: 32,
                     color: Colors.white70
                   ),
                 ),
                 Container(
                   child: SvgPicture.asset(
                     'assets/profile.svg',
-                    width: 40,
-                    height: 40,
+                    width: 32,
+                    height: 32,
                     color: Colors.white70,
                   ),
                 )
