@@ -91,10 +91,13 @@ class _HomePageState extends State<HomePage> {
             CurvedNavigationBar(
               height: 50,
               backgroundColor: Colors.transparent,
+              buttonBackgroundColor: Colors.purple,
+
+              color: darkCornColor,
               items: <Widget>[
-                Icon(Icons.add, size: 30),
-                Icon(Icons.list, size: 30),
-                Icon(Icons.compare_arrows, size: 30),
+                Icon(Icons.add, size: 30, color: Colors.white70),
+                Icon(Icons.list, size: 30, color: Colors.white70),
+                Icon(Icons.compare_arrows, size: 30, color: Colors.white70),
               ],
               onTap: (index) {
                 //Handle button tap
