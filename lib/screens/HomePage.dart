@@ -152,15 +152,15 @@ class _HomePageState extends State<HomePage> {
                 ),
                 Container(
                   child: SvgPicture.asset('assets/DartmouthSocial.svg',
-                      width: 40, height: 40, color: Colors.white70),
+                      width: 35, height: 35, color: Colors.white70),
                 ),
                 Container(
                   child: SvgPicture.asset('assets/Map.svg',
-                      width: 40, height: 40, color: Colors.white70),
+                      width: 32, height: 32, color: Colors.white70),
                 ),
                 Container(
                   child: SvgPicture.asset('assets/Calendar.svg',
-                      width: 40, height: 40, color: Colors.white70),
+                      width: 32, height: 32, color: Colors.white70),
                 ),
                 Container(
                   child: SvgPicture.asset(
