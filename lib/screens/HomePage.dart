@@ -5,6 +5,7 @@ import 'package:flappy_search_bar/search_bar_style.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'file:///C:/Users/Sudha/AndroidStudioProjects/on_night/lib/widgets/animated_gradient_box.dart';
 import 'package:simple_animations/simple_animations.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
@@ -67,6 +68,9 @@ class _HomePageState extends State<HomePage> {
       style: optionStyle,
     ),
   ];
+
+  // Gradients
+
 
   void _onItemTapped(int index) {
     setState(() {
@@ -138,6 +142,7 @@ class _HomePageState extends State<HomePage> {
                 )),
             ],
         ),
+
         Align(
             alignment: Alignment.bottomCenter,
             child: CurvedNavigationBar(
