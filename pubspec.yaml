@@ -71,6 +71,7 @@ flutter:
     - assets/fluffy_fracket.svg
     - assets/settings_gear.svg
     - assets/cup_and_ball.svg
+    - assets/google-logo.svg
   # assets:
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
