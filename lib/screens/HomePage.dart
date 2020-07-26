@@ -6,8 +6,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'file:///C:/Users/Sudha/AndroidStudioProjects/on_night/lib/widgets/animated_gradient_box.dart';
+import 'package:simple_animations/simple_animations.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
+import 'package:on_night/animated_gradient_box.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key key, this.title}) : super(key: key);
@@ -31,9 +33,11 @@ Map<int, Color> darkCorn = {
   900: Color.fromRGBO(18, 19, 31, 1),
 };
 
+
 MaterialColor darkCornColor = MaterialColor(0xFF12131F, darkCorn);
 
 class _HomePageState extends State<HomePage> {
+
   // WebView Controller
   final Completer<WebViewController> _controller =
       Completer<WebViewController>();
@@ -73,11 +77,11 @@ class _HomePageState extends State<HomePage> {
       _selectedIndex = index;
     });
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(alignment: Alignment.bottomCenter, children: <Widget>[
+//        AnimatedBackground(),
         WebView(
           initialUrl: 'https://onnight-1403b.web.app/',
           javascriptMode: JavascriptMode.unrestricted,
@@ -135,7 +139,8 @@ class _HomePageState extends State<HomePage> {
                 child: Container(
                   child: SvgPicture.asset('assets/settings_gear.svg',
                       width: 40, height: 40, color: Colors.white70),
-                ))],
+                )),
+            ],
         ),
 
         Align(
@@ -143,7 +148,7 @@ class _HomePageState extends State<HomePage> {
             child: CurvedNavigationBar(
               height: 50,
               backgroundColor: Colors.transparent,
-              buttonBackgroundColor: Colors.purple,
+              buttonBackgroundColor: Colors.transparent,
               color: darkCornColor,
               items: <Widget>[
                 Container(
@@ -180,3 +185,29 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
+class AnimatedBackground extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final tween = MultiTrackTween([
+      Track("color1").add(Duration(seconds: 3),
+          ColorTween(begin: Color(0xffD38312), end: Colors.lightBlue.shade900)),
+      Track("color2").add(Duration(seconds: 3),
+          ColorTween(begin: Color(0xffA83279), end: Colors.blue.shade600))
+    ]);
+
+    return ControlledAnimation(
+      playback: Playback.MIRROR,
+      tween: tween,
+      duration: tween.duration,
+      builder: (context, animation) {
+        return Container(
+          decoration: BoxDecoration(
+              gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [animation["color1"], animation["color2"]])),
+        );
+      },
+    );
+  }
+}
