@@ -5,7 +5,6 @@ import 'package:flappy_search_bar/search_bar_style.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'file:///C:/Users/Sudha/AndroidStudioProjects/on_night/lib/widgets/animated_gradient_box.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 
@@ -67,7 +66,6 @@ class _HomePageState extends State<HomePage> {
 
   // Gradients
 
-
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -86,8 +84,9 @@ class _HomePageState extends State<HomePage> {
           },
         ),
         Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: <Widget>[Align(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: <Widget>[
+            Align(
               alignment: FractionalOffset(0, 0.05),
               child: Container(
                 child: SvgPicture.asset('assets/cup.svg',
@@ -108,11 +107,12 @@ class _HomePageState extends State<HomePage> {
                         child: SearchBar(
                           iconActiveColor: Colors.white,
                           textStyle: TextStyle(
+
                             color: Colors.white,
                           ),
                           searchBarStyle: SearchBarStyle(
-                            borderRadius: BorderRadius.circular(50),
 
+                            borderRadius: BorderRadius.circular(50),
                           ),
                         ),
                       ),
@@ -130,53 +130,60 @@ class _HomePageState extends State<HomePage> {
 //            ),
               ),
             ),
-              Align(
+            Align(
                 alignment: FractionalOffset(0.95, 0.05),
                 child: Container(
                   child: SvgPicture.asset('assets/settings_gear.svg',
                       width: 40, height: 40, color: Colors.white70),
-                ))],
+                ))
+          ],
         ),
-
         Align(
-            alignment: Alignment.bottomCenter,
-            child: CurvedNavigationBar(
-              height: 50,
-              backgroundColor: Colors.transparent,
-              buttonBackgroundColor: Colors.purple,
-              color: darkCornColor,
-              items: <Widget>[
-                Container(
-                  child: SvgPicture.asset('assets/fracket.svg',
-                      width: 40, height: 40, color: Colors.white70),
-                ),
-                Container(
-                  child: SvgPicture.asset('assets/DartmouthSocial.svg',
-                      width: 35, height: 35, color: Colors.white70),
-                ),
-                Container(
-                  child: SvgPicture.asset('assets/Map.svg',
-                      width: 32, height: 32, color: Colors.white70),
-                ),
-                Container(
-                  child: SvgPicture.asset('assets/Calendar.svg',
-                      width: 32, height: 32, color: Colors.white70),
-                ),
-                Container(
-                  child: SvgPicture.asset(
-                    'assets/profile.svg',
-                    width: 32,
-                    height: 32,
-                    color: Colors.white70,
-                  ),
-                )
-              ],
-              onTap: (index) {
-                //Handle button tap
-              },
-            ))
+          alignment: Alignment.center,
+          child: SvgPicture.asset(
+            'assets/google-logo.svg',
+            width: 32,
+            height: 32,
+          ),
+        ),
+//        Align(
+//            alignment: Alignment.bottomCenter,
+//            child: CurvedNavigationBar(
+//              height: 50,
+//              backgroundColor: Colors.transparent,
+//              buttonBackgroundColor: Colors.purple,
+//              color: darkCornColor,
+//              items: <Widget>[
+//                Container(
+//                  child: SvgPicture.asset('assets/fracket.svg',
+//                      width: 40, height: 40, color: Colors.white70),
+//                ),
+//                Container(
+//                  child: SvgPicture.asset('assets/DartmouthSocial.svg',
+//                      width: 35, height: 35, color: Colors.white70),
+//                ),
+//                Container(
+//                  child: SvgPicture.asset('assets/Map.svg',
+//                      width: 32, height: 32, color: Colors.white70),
+//                ),
+//                Container(
+//                  child: SvgPicture.asset('assets/Calendar.svg',
+//                      width: 32, height: 32, color: Colors.white70),
+//                ),
+//                Container(
+//                  child: SvgPicture.asset(
+//                    'assets/profile.svg',
+//                    width: 32,
+//                    height: 32,
+//                    color: Colors.white70,
+//                  ),
+//                )
+//              ],
+//              onTap: (index) {
+//                //Handle button tap
+//              },
+//            ))
       ]),
     );
   }
 }
-

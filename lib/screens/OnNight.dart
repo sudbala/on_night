@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:on_night/widgets/NavigationBarController.dart';
 
 import 'HomePage.dart';
 
@@ -13,7 +14,7 @@ class OnNight extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: HomePage(title: 'OnNight'),
+      home: NavigationBarController(),
     );
   }
 }
