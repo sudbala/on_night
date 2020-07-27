@@ -1,19 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:on_night/widgets/NavigationBarController.dart';
 
-import 'HomePage.dart';
-
+/// OnNight widget is the heart of this application. Runs the app
+///
+/// Sets the theme, runs the NavigationBarController that will let us navigate
+/// throughout our different screens.
 class OnNight extends StatelessWidget {
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'OnNight',
       // Theme of our app!
       theme: ThemeData(
+        // Primary colors, are not shown, but will probably change these just in case
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
+      // Navigate via our navigationBarController
       home: NavigationBarController(),
     );
   }

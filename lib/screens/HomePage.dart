@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:ui';
-
 import 'package:flappy_search_bar/flappy_search_bar.dart';
 import 'package:flappy_search_bar/search_bar_style.dart';
 import 'package:flutter/cupertino.dart';
@@ -8,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
+/// HomePage widget houses the current home page, the mapView! Currently in the
+/// process of being changed by M a r i a :)
 class HomePage extends StatefulWidget {
   HomePage({Key key, this.title}) : super(key: key);
 
@@ -17,64 +18,19 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-Map<int, Color> darkCorn = {
-  50: Color.fromRGBO(18, 19, 31, .1),
-  100: Color.fromRGBO(18, 19, 31, .2),
-  200: Color.fromRGBO(18, 19, 31, .3),
-  300: Color.fromRGBO(18, 19, 31, .4),
-  400: Color.fromRGBO(18, 19, 31, .5),
-  500: Color.fromRGBO(18, 19, 31, .6),
-  600: Color.fromRGBO(18, 19, 31, .7),
-  700: Color.fromRGBO(18, 19, 31, .8),
-  800: Color.fromRGBO(18, 19, 31, .9),
-  900: Color.fromRGBO(18, 19, 31, 1),
-};
 
-MaterialColor darkCornColor = MaterialColor(0xFF12131F, darkCorn);
 
+/// This holds the current state of our homePage
 class _HomePageState extends State<HomePage> {
   // WebView Controller
   final Completer<WebViewController> _controller =
       Completer<WebViewController>();
 
-  // Current selected tab
-  int _selectedIndex = 0;
-  static const TextStyle optionStyle =
-      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
-  static const List<Widget> _widgetOptions = <Widget>[
-    Text(
-      'Index 0: Frackets',
-      style: optionStyle,
-    ),
-    Text(
-      'Index 1: Social',
-      style: optionStyle,
-    ),
-    Text(
-      'Index 2: Map',
-      style: optionStyle,
-    ),
-    Text(
-      'Index 3: Calendar',
-      style: optionStyle,
-    ),
-    Text(
-      'Index 4: Profile',
-      style: optionStyle,
-    ),
-  ];
-
-  // Gradients
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
-
+  /// Building of the HomePage Widget!
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // Stack to hold webView and top View in place
       body: Stack(alignment: Alignment.bottomCenter, children: <Widget>[
         WebView(
           initialUrl: 'https://onnight-1403b.web.app/',
