@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:on_night/screens/OnNight.dart';
 
+/// Runs the app from the main function
 void main() {
-  //SystemChrome.setEnabledSystemUIOverlays([]);
   runApp(OnNight());
 }

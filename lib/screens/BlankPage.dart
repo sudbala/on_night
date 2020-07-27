@@ -1,6 +1,7 @@
-
 import 'package:flutter/material.dart';
 
+/// This BlankPage Widget is a completely Blank Widget with a custom listView
+/// added to it in order to serve as our 'placeholder' screens for now
 class BlankPage extends StatefulWidget {
   BlankPage({Key key}) : super(key: key);
 

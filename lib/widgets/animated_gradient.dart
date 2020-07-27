@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
+/// Animated Gradient Widget used in making the AnimatedGradientBox
 Gradient useAnimatedGradient({
   Duration duration = const Duration(seconds: 5),
   List<Gradient> gradients,
