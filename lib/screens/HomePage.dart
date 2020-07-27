@@ -6,11 +6,7 @@ import 'package:flappy_search_bar/search_bar_style.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:simple_animations/simple_animations.dart';
 import 'package:webview_flutter/webview_flutter.dart';
-import 'package:curved_navigation_bar/curved_navigation_bar.dart';
-import 'package:on_night/animated_gradient_box.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key key, this.title}) : super(key: key);
@@ -131,4 +127,3 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
-

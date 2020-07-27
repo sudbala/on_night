@@ -1,0 +1,99 @@
+{
+  "project_info": {
+    "project_number": "339108597804",
+    "firebase_url": "https://onnight-1403b.firebaseio.com",
+    "project_id": "onnight-1403b",
+    "storage_bucket": "onnight-1403b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:339108597804:android:09a55a84827d3c58954189",
+        "android_client_info": {
+          "package_name": "com.on_night"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "339108597804-euof137c0p5csens18l0bgu7bfobshft.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDiX7AiBzIShwyWIh-tiXo5zsXCmaz9Sl4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "339108597804-35pa2m509jogiigqgqsd12scaqj66n7d.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "339108597804-t8mlpcniunnlpvficd502mmodgikkbfi.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.onNight"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:339108597804:android:73250304a140323b954189",
+        "android_client_info": {
+          "package_name": "on.night"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "339108597804-u1hjtrb1hkfsmals9kkcvcfg6unf0mti.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "on.night",
+            "certificate_hash": "1eb45cb3b2c17426c1cc2937820c7bc97486fa20"
+          }
+        },
+        {
+          "client_id": "339108597804-e5sr3vavabcsgmuboqt02lqrq9jr1ifr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "on.night",
+            "certificate_hash": "440800c10608af8280c5ceadad2e196c12889c32"
+          }
+        },
+        {
+          "client_id": "339108597804-euof137c0p5csens18l0bgu7bfobshft.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDiX7AiBzIShwyWIh-tiXo5zsXCmaz9Sl4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "339108597804-35pa2m509jogiigqgqsd12scaqj66n7d.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "339108597804-t8mlpcniunnlpvficd502mmodgikkbfi.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.onNight"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
