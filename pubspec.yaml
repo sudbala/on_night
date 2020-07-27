@@ -39,6 +39,19 @@ dependencies:
   simple_animations: ^2.2.1
   google_fonts: ^1.1.0
 
+  # The core of firebase fire plugin
+  firebase_core: ^0.4.0+9
+
+  # Dependency for the FlutterFire plugin for Google Analytics
+  firebase_analytics: ^5.0.2
+
+  # Dependencies for other Firebase products we want to use in OnNight.
+  firebase_auth: ^0.14.0+5
+  cloud_firestore: ^0.12.9+5
+  google_maps_flutter: ^0.5.28+1
+
+
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
