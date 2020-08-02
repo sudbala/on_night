@@ -50,8 +50,6 @@ class _NavigationBarControllerState extends State<NavigationBarController> {
     ),
   ];
 
-
-
   /// PageStorage for a given state
   final PageStorageBucket bucket = PageStorageBucket();
 
@@ -101,17 +99,22 @@ class _NavigationBarControllerState extends State<NavigationBarController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        resizeToAvoidBottomPadding: false,
+        resizeToAvoidBottomInset: false,
         body: Stack(
-      children: <Widget>[
-        PageStorage(
-          child: pages[_selectedIndex],
-          bucket: bucket,
-        ),
-        Align(
-          alignment: Alignment.bottomCenter,
-          child: _navigationBar(_selectedIndex),
-        ),
-      ],
-    ));
+          children: <Widget>[
+            PageStorage(
+              child: AnimatedSwitcher(
+                duration: const Duration(milliseconds: 1000),
+                child: pages[_selectedIndex],
+              ),
+              bucket: bucket,
+            ),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: _navigationBar(_selectedIndex),
+            ),
+          ],
+        ));
   }
 }
