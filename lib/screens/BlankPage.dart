@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:location/location.dart';
+import 'package:on_night/model/ColorSwitcher.dart';
 
 /// This BlankPage Widget is a completely Blank Widget with a custom listView
 /// added to it in order to serve as our 'placeholder' screens for now
@@ -18,26 +19,11 @@ class _BlankPageState extends State<BlankPage> {
   GoogleMapController _mapController;
   bool _showMapStyle = false;
   Set<Polygon> _fratPolygons = HashSet<Polygon>();
+  Map<String, ColorSwitcher> statusMap = HashMap<String, ColorSwitcher>();
+  List<LatLng> trikap_points = List<LatLng>();
 
-  void _onMapCreated(GoogleMapController controller) {
-    _mapController = controller;
-
-    setState(() {
-      _setPolygons();
-    });
-
-    _setMapStyle();
-  }
-
-  void _setMapStyle() async {
-    String style = await DefaultAssetBundle.of(context)
-        .loadString('assets/map_style.json');
-    print('mrp yes this is happening');
-    _mapController.setMapStyle(style);
-  }
-
-  void _setPolygons() {
-    List<LatLng> trikap_points = List<LatLng>();
+  @override
+  void initState() {
     trikap_points.add(LatLng(43.706194544415595, -72.28984499162837));
     trikap_points.add(LatLng(43.70620326968381, -72.28984365052386));
     trikap_points.add(LatLng(43.70621199495077, -72.28984230941936));
@@ -139,133 +125,100 @@ class _BlankPageState extends State<BlankPage> {
     trikap_points.add(LatLng(43.70619570778476, -72.28986618107957));
     trikap_points.add(LatLng(43.706194738310444, -72.28985411113901));
 
-//    strokeColor: color,
-//    strokeOpacity: .8,
-//    strokeWeight: 3,
-//    fillColor: '#7f00ff',
-//    fillOpacity: .35
-    Color strokeColor = Colors.pink;
-
-
-    Firestore.instance
-        .collection("GreekSpaces")
-        .document("Kappa Kappa Kappa")
-        .snapshots()
-        .listen((event) {
-          setState(() {
-            _fratPolygons.add(
-              Polygon(
-                polygonId: PolygonId("trikap"),
-                points: trikap_points,
-                strokeColor: strokeColor,
-                strokeWidth: 3,
-                fillColor: Colors.pinkAccent.shade100,
-                geodesic: true,
-              ),
-            );
-          });
-
-//          if(event.data.containsValue(true)) {
-//            strokeColor = Colors.red
-//          }
-//          if (event.data.containsValue("false")) {
-//            strokeColor = Colors.red;
-//          }
-    });
-
-//    _fratPolygons.add(
-//      Polygon(
-//        polygonId: PolygonId("trikap"),
-//        points: trikap_points,
-//        strokeColor: strokeColor,
-//        strokeWidth: 3,
-//        fillColor: Colors.pinkAccent.shade100,
-//        geodesic: true,
-//      ),
-//    );
+    statusMap["Kappa Kappa Kappa"] =
+        ColorSwitcher(Color(0xff7F00FF), Color(0xFFFF0000), false);
   }
 
-  Set<Polygon> _polygons = Set();
+  void _onMapCreated(GoogleMapController controller) {
+    _mapController = controller;
+
+//    setState(() {
+//      _setPolygons();
+//    });
+
+    _setMapStyle();
+  }
+
+  void _setMapStyle() async {
+    String style = await DefaultAssetBundle.of(context)
+        .loadString('assets/map_style.json');
+//    print('mrp yes this is happening');
+    _mapController.setMapStyle(style);
+  }
+
+  Future<void> _setPolygons() async {
+
+    // Get all data. An async call on another thread and acts as a future call
+    var result = await Firestore.instance
+        .collection("GreekSpaces")
+        .getDocuments()
+        .then((querySnapShot) {
+      querySnapShot.documents.forEach((element) {
+        element.data.forEach((key, value) {
+          if (value == true) {
+            statusMap[key].setStatus(true);
+          } else {
+            statusMap[key].setStatus(false);
+          }
+        });
+      });
+    });
+
+    // Create the polygons
+    Polygon triKap = Polygon(
+        polygonId: PolygonId("triKap"),
+        points: trikap_points,
+        strokeWidth: 3,
+        fillColor: Color.fromRGBO(127, 0, 255, 0.35),
+        strokeColor: statusMap["Kappa Kappa Kappa"].getStatusColor(),
+    );
+
+    // Add polygon to the fratPolygon list
+    _fratPolygons.add(triKap);
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Maria's Screen"),
-      ),
-      body: GoogleMap(
-        onMapCreated: _onMapCreated,
-        buildingsEnabled: true,
-        zoomControlsEnabled: false,
-        polygons: _polygons,
-        initialCameraPosition: CameraPosition(
-          target: LatLng(43.704871, -72.288735),
-          zoom: 17,
-          tilt: 6,
-        ),
-//        onCameraIdle: _addPolygon,
-//        onTap: _addPolygon,
-      ),
-    );
+    // Sud learned about FutureBuilder!!! Maria will be proud of sud!
+    return FutureBuilder(
+        future: _setPolygons(),
+        builder: (context, snapshot) {
+          return Stack(children: <Widget>[
+            GoogleMap(
+              onMapCreated: _onMapCreated,
+              buildingsEnabled: false,
+              zoomControlsEnabled: false,
+              polygons: _fratPolygons,
+              initialCameraPosition: CameraPosition(
+                target: LatLng(43.704871, -72.288735),
+                zoom: 17,
+                tilt: 6,
+              ),
+            ),
+            Positioned(
+              bottom: 60,
+              right: 10,
+              child: FloatingActionButton(
+                child: Icon(Icons.refresh),
+                onPressed: _updateFrats,
+                backgroundColor: Color(0xff992181),
+              ),
+            ),
+          ]);
+        });
   }
 
-//  void _updatePolygons(List<DocumentSnapshot> documentList) {
-//    print(documentList);
-//
-//  }
 
-//  List<LatLng> polypoints = List();
-//  Color strokeColor;
-//  void _addPolygon() async{
-//    polypoints.add(LatLng(43.706194544415595, -72.28984499162837));
-//    polypoints.add(LatLng(43.70620326968381, -72.28984365052386));
-//    polypoints.add(LatLng(43.70621199495077, -72.28984230941936));
-//    polypoints.add(LatLng(43.706219944637354, -72.28984070009393));
-//    polypoints.add(LatLng(43.706228476007134, -72.28983828610583));
-//
-//        Firestore.instance
-//        .collection("GreekSpaces")
-//        .document("Kappa Kappa Kappa")
-//        .snapshots()
-//        .listen((event) {
-//          if(event.data.containsValue(true)) {
-//            strokeColor = Colors.blue;
-//          }
-//          if (event.data.containsValue(false)) {
-//            strokeColor = Colors.pink;
-//          }
-//          if (polypoints.length > 4) {
-//            print("called polygon");
-//            print(polypoints);
-//            setState(() {
-//              _polygons.add(Polygon(
-//                  polygonId: PolygonId('test'),
-//                  points: polypoints,
-//                  strokeColor: strokeColor));
-//            });
-//          }
-//    });
-//
-//
-//  }
 
-//  List<LatLng> polypoints = List();
-//  Color col = Colors.blue;
-//  _addPolygon(LatLng points) {
-//    assert(points != null);
-//
-//    polypoints.add(points);
-//    if (polypoints.length > 4) {
-//      if (polypoints.length > 5)
-//        col = Colors.red;
-//      print("called polygon");
-//      print(polypoints);
-//      setState(() {
-//        _polygons.add(Polygon(
-//            polygonId: PolygonId('test'),
-//            points: polypoints,
-//            strokeColor: col));
-//      });
-//    }
-//  }
+
+
+
+  Future<void> _updateFrats() async {
+    _fratPolygons.clear();
+    setState(() {
+      print(_fratPolygons.length);
+    });
+  }
+
+
 }
