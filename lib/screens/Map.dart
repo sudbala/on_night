@@ -8,14 +8,14 @@ import 'package:on_night/model/ColorSwitcher.dart';
 
 /// This BlankPage Widget is a completely Blank Widget with a custom listView
 /// added to it in order to serve as our 'placeholder' screens for now
-class BlankPage extends StatefulWidget {
-  BlankPage({Key key}) : super(key: key);
+class NightMap extends StatefulWidget {
+  NightMap({Key key}) : super(key: key);
 
   @override
-  _BlankPageState createState() => _BlankPageState();
+  _NightMapState createState() => _NightMapState();
 }
 
-class _BlankPageState extends State<BlankPage> {
+class _NightMapState extends State<NightMap> {
   GoogleMapController _mapController;
   bool _showMapStyle = false;
   Set<Polygon> _fratPolygons = HashSet<Polygon>();
@@ -126,7 +126,7 @@ class _BlankPageState extends State<BlankPage> {
     trikap_points.add(LatLng(43.706194738310444, -72.28985411113901));
 
     statusMap["Kappa Kappa Kappa"] =
-        ColorSwitcher(Color(0xff7F00FF), Color(0xFFFF0000), false);
+        ColorSwitcher(Color(0xff7F00FF), Color(0xff120024), false);
   }
 
   void _onMapCreated(GoogleMapController controller) {
@@ -169,8 +169,8 @@ class _BlankPageState extends State<BlankPage> {
         polygonId: PolygonId("triKap"),
         points: trikap_points,
         strokeWidth: 3,
-        fillColor: Color.fromRGBO(127, 0, 255, 0.35),
-        strokeColor: statusMap["Kappa Kappa Kappa"].getStatusColor(),
+        fillColor: statusMap["Kappa Kappa Kappa"].getStatusColor().withOpacity(statusMap["Kappa Kappa Kappa"].getOpacity()),
+        strokeColor: statusMap["Kappa Kappa Kappa"].getStatusColor().withOpacity(0.8),
     );
 
     // Add polygon to the fratPolygon list
