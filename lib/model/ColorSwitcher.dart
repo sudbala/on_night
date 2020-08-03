@@ -5,6 +5,7 @@ class ColorSwitcher {
   // Instance variables used for the color switcher
   bool status;
   Color openColor, closedColor, returnColor;
+  double opacity;
 
   // Constructor for the colorSwitcher
   ColorSwitcher(this.openColor, this.closedColor, this.status);
@@ -17,8 +18,10 @@ class ColorSwitcher {
 
     if (status) {
       returnColor = openColor;
+      opacity = 0.35;
     } else {
       returnColor = closedColor;
+      opacity = 0.5;
     }
   }
 
@@ -30,5 +33,8 @@ class ColorSwitcher {
     return returnColor;
   }
 
+  double getOpacity() {
+    return opacity;
+  }
 
 }
