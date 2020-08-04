@@ -151,6 +151,7 @@ class _BlankPageState extends State<BlankPage> {
         strokeColor: Colors.pink,
         strokeWidth: 3,
         fillColor: Colors.pinkAccent.shade100,
+        geodesic: true,
       ),
     );
   }
@@ -165,7 +166,7 @@ class _BlankPageState extends State<BlankPage> {
       body: GoogleMap(
 
         onMapCreated: _onMapCreated,
-          buildingsEnabled: false,
+          mapType: MapType.normal,
           zoomControlsEnabled: false,
           polygons: _fratPolygons,
           initialCameraPosition:
