@@ -1,8 +1,9 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:on_night/screens/BlankPage.dart';
+import 'package:on_night/screens/Map.dart';
 import 'package:on_night/screens/HomePage.dart';
+import 'package:on_night/screens/Template.dart';
 
 /// The NavigationBarController navigates throughout different pages of the app
 ///
@@ -33,24 +34,22 @@ MaterialColor darkCornColor = MaterialColor(0xFF12131F, darkCorn);
 /// widget based on that state.
 class _NavigationBarControllerState extends State<NavigationBarController> {
   final List<Widget> pages = [
-    BlankPage(
+    Template(
       key: PageStorageKey('Page 1'),
     ),
-    BlankPage(
+    Template(
       key: PageStorageKey('Page 2'),
     ),
-    HomePage(
+    NightMap(
       key: PageStorageKey('Page 3'),
     ),
-    BlankPage(
+    Template(
       key: PageStorageKey('Page 4'),
     ),
-    BlankPage(
+    Template(
       key: PageStorageKey('Page 5'),
     ),
   ];
-
-
 
   /// PageStorage for a given state
   final PageStorageBucket bucket = PageStorageBucket();
@@ -101,17 +100,22 @@ class _NavigationBarControllerState extends State<NavigationBarController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        resizeToAvoidBottomPadding: false,
+        resizeToAvoidBottomInset: false,
         body: Stack(
-      children: <Widget>[
-        PageStorage(
-          child: pages[_selectedIndex],
-          bucket: bucket,
-        ),
-        Align(
-          alignment: Alignment.bottomCenter,
-          child: _navigationBar(_selectedIndex),
-        ),
-      ],
-    ));
+          children: <Widget>[
+            PageStorage(
+              child: AnimatedSwitcher(
+                duration: const Duration(milliseconds: 1000),
+                child: pages[_selectedIndex],
+              ),
+              bucket: bucket,
+            ),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: _navigationBar(_selectedIndex),
+            ),
+          ],
+        ));
   }
 }
