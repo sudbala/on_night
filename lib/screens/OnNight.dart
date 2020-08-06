@@ -21,7 +21,7 @@ class OnNight extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       // Navigate via our navigationBarController
-      home: LoginScreen(), //NavigationBarController(),
+      home: NavigationBarController(),
     );
   }
 }

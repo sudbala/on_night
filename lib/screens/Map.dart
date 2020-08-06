@@ -156,6 +156,7 @@ class _NightMapState extends State<NightMap> {
         .getDocuments()
         .then((querySnapShot) {
       querySnapShot.documents.forEach((element) {
+        //print(element.data);
         element.data.forEach((key, value) {
           if (value == true) {
             statusMap[key].setStatus(true);
@@ -259,7 +260,6 @@ class _NightMapState extends State<NightMap> {
   Future<void> _updateFrats() async {
     _fratPolygons.clear();
     setState(() {
-      print(_fratPolygons.length);
     });
   }
 }
