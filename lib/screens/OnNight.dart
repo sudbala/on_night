@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:on_night/screens/Login.dart';
 import 'package:on_night/widgets/NavigationBarController.dart';
 
 /// OnNight widget is the heart of this application. Runs the app
@@ -17,7 +18,7 @@ class OnNight extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       // Navigate via our navigationBarController
-      home: NavigationBarController(),
+      home: LoginScreen(), //NavigationBarController(),
     );
   }
 }
