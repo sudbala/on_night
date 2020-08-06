@@ -90,6 +90,8 @@ flutter:
     - assets/google-logo.svg
     - assets/map_style.json
     - assets/on_night_background_10.png
+    - assets/strawberry.jpg
+
   # assets:
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
