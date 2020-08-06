@@ -13,7 +13,10 @@ class OnNight extends StatelessWidget {
       // Theme of our app!
       theme: ThemeData(
         // Primary colors, are not shown, but will probably change these just in case
-        primarySwatch: Colors.blue,
+        primarySwatch: darkCornColor,
+        primaryColor: darkCornColor,
+        brightness: Brightness.light,
+        accentColor: Colors.cyan[600],
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       // Navigate via our navigationBarController

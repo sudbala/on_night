@@ -1,6 +1,9 @@
 import 'dart:collection';
 
+import 'package:flappy_search_bar/flappy_search_bar.dart';
+import 'package:flappy_search_bar/search_bar_style.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:location/location.dart';
@@ -147,7 +150,6 @@ class _NightMapState extends State<NightMap> {
   }
 
   Future<void> _setPolygons() async {
-
     // Get all data. An async call on another thread and acts as a future call
     var result = await Firestore.instance
         .collection("GreekSpaces")
@@ -166,11 +168,14 @@ class _NightMapState extends State<NightMap> {
 
     // Create the polygons
     Polygon triKap = Polygon(
-        polygonId: PolygonId("triKap"),
-        points: trikap_points,
-        strokeWidth: 3,
-        fillColor: statusMap["Kappa Kappa Kappa"].getStatusColor().withOpacity(statusMap["Kappa Kappa Kappa"].getOpacity()),
-        strokeColor: statusMap["Kappa Kappa Kappa"].getStatusColor().withOpacity(0.8),
+      polygonId: PolygonId("triKap"),
+      points: trikap_points,
+      strokeWidth: 3,
+      fillColor: statusMap["Kappa Kappa Kappa"]
+          .getStatusColor()
+          .withOpacity(statusMap["Kappa Kappa Kappa"].getOpacity()),
+      strokeColor:
+          statusMap["Kappa Kappa Kappa"].getStatusColor().withOpacity(0.8),
     );
 
     // Add polygon to the fratPolygon list
@@ -180,11 +185,13 @@ class _NightMapState extends State<NightMap> {
   @override
   Widget build(BuildContext context) {
     // Sud learned about FutureBuilder!!! Maria will be proud of sud!
+    // Maria is proud of sud! omg! :) <3 8/5/20
     return FutureBuilder(
         future: _setPolygons(),
         builder: (context, snapshot) {
           return Stack(children: <Widget>[
             GoogleMap(
+              compassEnabled: false,
               onMapCreated: _onMapCreated,
               buildingsEnabled: false,
               zoomControlsEnabled: false,
@@ -204,14 +211,50 @@ class _NightMapState extends State<NightMap> {
                 backgroundColor: Color(0xff992181),
               ),
             ),
+            SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.all(5.0),
+                child: Align(
+                  alignment: Alignment.topCenter,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Container(
+                        child: SvgPicture.asset('assets/cup.svg',
+                            width: 40, height: 40, color: Colors.white70),
+                      ),
+                      Container(
+                        height: 40,
+                        child: SizedBox(
+                          height: 40,
+                          width: 280,
+                          child: Container(
+                            height: 40,
+                            child: SearchBar(
+                              iconActiveColor: Colors.white,
+                              textStyle:
+                                  TextStyle(color: Colors.white, fontSize: 20),
+                              searchBarStyle: SearchBarStyle(
+                                //padding: EdgeInsets.only(top: 50),
+                                borderRadius: BorderRadius.circular(50),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        child: SvgPicture.asset('assets/settings_gear.svg',
+                            width: 40, height: 40, color: Colors.white70),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
           ]);
         });
   }
-
-
-
-
-
 
   Future<void> _updateFrats() async {
     _fratPolygons.clear();
@@ -219,6 +262,4 @@ class _NightMapState extends State<NightMap> {
       print(_fratPolygons.length);
     });
   }
-
-
 }
