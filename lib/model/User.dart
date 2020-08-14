@@ -1,6 +1,6 @@
 
 /// A class object to store and write users from and to the database
-/// Sud is amazing but Maria is s p e c t a c u l a r
+/// Sud is amazing but Maria is s p e c t a c u l a r 8/6/20
 class User {
   // Instance Variables
   String legalName, displayName, affiliation, dormRoom, email, phoneNumber, netID;
