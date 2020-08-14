@@ -1,8 +1,11 @@
 import 'dart:ui';
 
 import 'package:flare_flutter/flare_actor.dart';
+import 'package:flare_flutter/flare_controls.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:on_night/widgets/NavigationBarController.dart';
+import 'package:flutter/services.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -10,6 +13,37 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  // Initialize animation controls
+  FlareControls flareController = FlareControls();
+  String animation = "Login Idle";
+
+  @override
+  void initState() {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitDown,
+      DeviceOrientation.portraitUp,
+    ]);
+  }
+
+  @override
+  void dispose() {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
+    ]);
+  }
+
+  Future navigateToMainPage(context) async {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => NavigationBarController(),
+      ),
+    );
+  }
+
   Widget LoginPage() {
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -44,19 +78,29 @@ class _LoginScreenState extends State<LoginScreen> {
             fit: BoxFit.cover,
           )),
           child: Stack(children: <Widget>[
-            Container(
-              height: constraints.maxHeight/1.2,
-              width: constraints.maxWidth,
-              child: FlareActor(
-                'assets/animations/ball_break_on_night.flr',
-                animation: "Untitled",
-                fit: BoxFit.cover,
+            Align(
+              alignment: Alignment.center,
+              child: Container(
+//                color: Colors.red,
+                height: constraints.maxHeight,
+                width: constraints.maxWidth,
+                child: FlareActor(
+                  'assets/animations/login (3).flr',
+                  controller: flareController,
+                  animation: animation,
+                  callback: (String animationName) {
+                    if (animationName == "Ball Break") {
+                      navigateToMainPage(context);
+                    }
+                  },
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
             Column(
               children: <Widget>[
                 Padding(
-                  padding: EdgeInsets.only(top: constraints.maxHeight / 3.2),
+                  padding: EdgeInsets.only(top: constraints.maxHeight / 2.8),
                   child: Center(
                     child: SvgPicture.asset(
                       'assets/cup.svg',
@@ -69,17 +113,22 @@ class _LoginScreenState extends State<LoginScreen> {
                   padding: EdgeInsets.only(top: constraints.maxHeight / 7),
                   child: Center(
                     child: SizedBox(
-                      width: constraints.maxWidth / 2.5,
+                      width: constraints.maxWidth / 2.2,
+                      height: constraints.maxHeight / 14,
                       child: FlatButton(
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(50.0),
                           side: BorderSide(
-                            color: Colors.purpleAccent,
+                            color: Color(0xffC71585),
                           ),
                         ),
                         highlightColor: Colors.white,
                         color: Colors.white10,
-                        onPressed: () {},
+                        onPressed: () {
+                          setState(() {
+                            animation = "Ball Break";
+                          });
+                        },
                       ),
                     ),
 //                child: OutlineButton(
