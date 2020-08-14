@@ -96,6 +96,8 @@ flutter:
     - assets/login_background.png
     - assets/strawberry.jpg
     - assets/animations/
+    - assets/maria_profile_pic.jpg
+
 
   # assets:
   #   - images/a_dot_burr.jpeg
