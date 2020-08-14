@@ -91,6 +91,7 @@ flutter:
     - assets/map_style.json
     - assets/on_night_background_10.png
     - assets/strawberry.jpg
+    - assets/maria_profile_pic.jpg
 
   # assets:
   #   - images/a_dot_burr.jpeg
