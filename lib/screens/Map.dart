@@ -8,6 +8,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:location/location.dart';
 import 'package:on_night/model/ColorSwitcher.dart';
+import 'package:permission/permission.dart';
 
 /// This BlankPage Widget is a completely Blank Widget with a custom listView
 /// added to it in order to serve as our 'placeholder' screens for now
@@ -151,24 +152,29 @@ class _NightMapState extends State<NightMap> {
 
   Future<void> _setPolygons() async {
     // Get all data. An async call on another thread and acts as a future call
-    var result = await Firestore.instance
+    print("in set Polygon");
+    print(trikap_points.length.toString());
+    var result = await FirebaseFirestore.instance
         .collection("GreekSpaces")
-        .getDocuments()
+        .get()
         .then((querySnapShot) {
-      querySnapShot.documents.forEach((element) {
-        //print(element.data);
-        element.data.forEach((key, value) {
-          if (value == true) {
-            statusMap[key].setStatus(true);
-          } else {
-            statusMap[key].setStatus(false);
-          }
-        });
-      });
+//      querySnapShot.docs.forEach((element) {
+//        //print(element.data);
+//        element.data.forEach((key, value) {
+//          if (value == true) {
+//            statusMap[key].setStatus(true);
+//            print("TriKap is open");
+//          } else {
+//            statusMap[key].setStatus(false);
+//            print("TriKap is closed");
+//          }
+//        });
+//      });
     });
 
     // Create the polygons
     Polygon triKap = Polygon(
+      geodesic: true,
       polygonId: PolygonId("triKap"),
       points: trikap_points,
       strokeWidth: 3,
@@ -178,7 +184,6 @@ class _NightMapState extends State<NightMap> {
       strokeColor:
           statusMap["Kappa Kappa Kappa"].getStatusColor().withOpacity(0.8),
     );
-
     // Add polygon to the fratPolygon list
     _fratPolygons.add(triKap);
   }
@@ -197,6 +202,7 @@ class _NightMapState extends State<NightMap> {
               buildingsEnabled: false,
               zoomControlsEnabled: false,
               polygons: _fratPolygons,
+
               initialCameraPosition: CameraPosition(
                 target: LatLng(43.704871, -72.288735),
                 zoom: 17,
