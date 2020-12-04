@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:on_night/screens/Map.dart';
 import 'package:on_night/screens/HomePage.dart';
-import 'file:///C:/Users/Maria/AndroidStudioProjects/FlutterProjects/on_night/lib/excluded/Template.dart';
+import 'package:on_night/excluded/Template.dart';
 
 /// The NavigationBarController navigates throughout different pages of the app
 ///
