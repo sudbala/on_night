@@ -1,12 +1,10 @@
 import 'dart:collection';
-
 import 'package:flappy_search_bar/flappy_search_bar.dart';
 import 'package:flappy_search_bar/search_bar_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:location/location.dart';
 import 'package:on_night/model/ColorSwitcher.dart';
 
 /// This BlankPage Widget is a completely Blank Widget with a custom listView
@@ -129,7 +127,7 @@ class _NightMapState extends State<NightMap> {
     trikap_points.add(LatLng(43.706194738310444, -72.28985411113901));
 
     statusMap["Kappa Kappa Kappa"] =
-        ColorSwitcher(Color(0xff7F00FF), Color(0xff120024), false);
+        ColorSwitcher(Color(0xff7F00FF), Color(0xff120024), true);
   }
 
   void _onMapCreated(GoogleMapController controller) {
@@ -151,36 +149,41 @@ class _NightMapState extends State<NightMap> {
 
   Future<void> _setPolygons() async {
     // Get all data. An async call on another thread and acts as a future call
-    var result = await Firestore.instance
-        .collection("GreekSpaces")
-        .getDocuments()
-        .then((querySnapShot) {
-      querySnapShot.documents.forEach((element) {
-        //print(element.data);
-        element.data.forEach((key, value) {
-          if (value == true) {
-            statusMap[key].setStatus(true);
-          } else {
-            statusMap[key].setStatus(false);
-          }
-        });
-      });
-    });
+    print("in set Polygon");
+    print(trikap_points.length.toString());
+
+    // Grab result with await so we set status keys to ColorSwitchers before
+    // we getStatusColor. Otherwise it will return null
+    var result = await FirebaseFirestore.instance
+        .collection('GreekSpaces')
+        .doc('Status')
+        .get()
+        .then((element) => {
+              element.data().forEach((key, value) {
+                if (value == true) {
+                  statusMap[key].setStatus(true);
+                  print("TriKap is open");
+                } else {
+                  statusMap[key].setStatus(false);
+                  print("TriKap is closed");
+                }
+              })
+            });
 
     // Create the polygons
     Polygon triKap = Polygon(
+      geodesic: true,
       polygonId: PolygonId("triKap"),
       points: trikap_points,
-      strokeWidth: 3,
       fillColor: statusMap["Kappa Kappa Kappa"]
           .getStatusColor()
           .withOpacity(statusMap["Kappa Kappa Kappa"].getOpacity()),
       strokeColor:
           statusMap["Kappa Kappa Kappa"].getStatusColor().withOpacity(0.8),
     );
-
     // Add polygon to the fratPolygon list
     _fratPolygons.add(triKap);
+    print("We got here");
   }
 
   @override
@@ -259,7 +262,6 @@ class _NightMapState extends State<NightMap> {
 
   Future<void> _updateFrats() async {
     _fratPolygons.clear();
-    setState(() {
-    });
+    setState(() {});
   }
 }

@@ -30,31 +30,33 @@ dependencies:
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^0.1.3
-  flutter_svg: ^0.18.0
-  webview_flutter: ^0.3.22+1
+  cupertino_icons: ^1.0.0 #could be 1.0.1 but needs Dart to be above 2.12.0 (current is 2.10.4)
+  flutter_svg: ^0.19.1 # could be 0.19.2+1 but needs Flutter SDK above 1.24.0 (current is 1.22.4)
+  webview_flutter: ^1.0.7
   curved_navigation_bar: ^0.3.3 #latest version
-  flappy_search_bar: 1.4.1
-  flutter_hooks: 0.4.0
+  flappy_search_bar: 1.7.2
+  flutter_hooks: 0.15.0
   simple_animations: ^2.2.1
   google_fonts: ^1.1.0
 
   # The core of firebase fire plugin
-  firebase_core: ^0.4.0+9
+  firebase_core: ^0.5.2+1
 
   # Dependency for the FlutterFire plugin for Google Analytics
-  firebase_analytics: ^5.0.2
+  firebase_analytics: ^6.2.0
 
   # Dependencies for other Firebase products we want to use in OnNight.
   # Sudharsan is great and added GoogleMaps for Maria. 7/30/20
-  firebase_auth: ^0.14.0+5
-  cloud_firestore: ^0.12.9+5
-  google_maps_flutter: ^0.5.28+1
-  location: ^2.3.5
+  firebase_auth: ^0.18.3+1
+  cloud_firestore: ^0.14.3+1
+  google_maps_flutter: ^1.0.6
+  location: ^3.1.0
   rxdart: ^0.24.1
-  rive: ^0.0.3
+  rive: ^0.6.3
   flare_flutter: ^2.0.6
 
+  # need for accessing location 12/2/2020
+  permission: ^0.1.7
 
 
 dev_dependencies:
