@@ -22,6 +22,8 @@ class _NightMapState extends State<NightMap> {
   Set<Polygon> _fratPolygons = HashSet<Polygon>();
   Map<String, ColorSwitcher> statusMap = HashMap<String, ColorSwitcher>();
   List<LatLng> trikap_points = List<LatLng>();
+  List<LatLng> gdx_points = List<LatLng>();
+  List<LatLng> tabard_points = List<LatLng>();
 
   @override
   void initState() {
@@ -41,7 +43,34 @@ class _NightMapState extends State<NightMap> {
 
     statusMap["Kappa Kappa Kappa"] =
         ColorSwitcher(Color(0xff7F00FF), Color(0xff120024), true);
+
+    gdx_points.add(LatLng(43.70664, -72.29013));
+    gdx_points.add(LatLng(43.70661, -72.28984));
+    gdx_points.add(LatLng(43.70648, -72.28987));
+    gdx_points.add(LatLng(43.70651, -72.29015));
+
+    statusMap["Gamma Delta Chi"] =
+        ColorSwitcher(Color(0xffC100FF), Color(0xff1B0024), true);
+
+    tabard_points.add(LatLng(43.70659, -72.29075));
+    tabard_points.add(LatLng(43.70656, -72.29063));
+    tabard_points.add(LatLng(43.70649, -72.29065));
+    tabard_points.add(LatLng(43.70646, -72.29054));
+    tabard_points.add(LatLng(43.70645, -72.29054));
+    tabard_points.add(LatLng(43.70644, -72.29052));
+    tabard_points.add(LatLng(43.70638, -72.29054));
+    tabard_points.add(LatLng(43.70637, -72.2906));
+    tabard_points.add(LatLng(43.70638, -72.29065));
+    tabard_points.add(LatLng(43.7064, -72.29064));
+    tabard_points.add(LatLng(43.70643, -72.29081));
+
+    statusMap["The Tabard"] =
+        ColorSwitcher(Color(0xffE41CFD), Color(0xff230028), true);
   }
+
+
+
+
 
   void _onMapCreated(GoogleMapController controller) {
     _mapController = controller;
@@ -75,10 +104,8 @@ class _NightMapState extends State<NightMap> {
               element.data().forEach((key, value) {
                 if (value == true) {
                   statusMap[key].setStatus(true);
-                  print("TriKap is open");
                 } else {
                   statusMap[key].setStatus(false);
-                  print("TriKap is closed");
                 }
               })
             });
@@ -94,8 +121,35 @@ class _NightMapState extends State<NightMap> {
       strokeColor:
           statusMap["Kappa Kappa Kappa"].getStatusColor().withOpacity(0.8),
     );
-    // Add polygon to the fratPolygon list
+
     _fratPolygons.add(triKap);
+    // Create the polygons
+    Polygon gdx = Polygon(
+      geodesic: true,
+      polygonId: PolygonId("gdx"),
+      points: gdx_points,
+      fillColor: statusMap["Gamma Delta Chi"]
+          .getStatusColor()
+          .withOpacity(statusMap["Gamma Delta Chi"].getOpacity()),
+      strokeColor:
+      statusMap["Gamma Delta Chi"].getStatusColor().withOpacity(0.8),
+    );
+    // Add polygon to the fratPolygon list
+    _fratPolygons.add(gdx);
+
+    // Create the polygons
+    Polygon tabard = Polygon(
+      geodesic: true,
+      polygonId: PolygonId("tabard"),
+      points: tabard_points,
+      fillColor: statusMap["The Tabard"]
+          .getStatusColor()
+          .withOpacity(statusMap["The Tabard"].getOpacity()),
+      strokeColor:
+      statusMap["The Tabard"].getStatusColor().withOpacity(0.8),
+    );
+    // Add polygon to the fratPolygon list
+    _fratPolygons.add(tabard);
     print("We got here");
   }
 
