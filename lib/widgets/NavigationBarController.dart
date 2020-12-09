@@ -1,9 +1,9 @@
-import 'package:curved_navigation_bar/curved_navigation_bar.dart';
+import 'curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:on_night/screens/Map.dart';
 import 'package:on_night/screens/HomePage.dart';
-import 'package:on_night/screens/Template.dart';
+import 'package:on_night/excluded/Template.dart';
 
 /// The NavigationBarController navigates throughout different pages of the app
 ///
@@ -34,19 +34,19 @@ MaterialColor darkCornColor = MaterialColor(0xFF12131F, darkCorn);
 /// widget based on that state.
 class _NavigationBarControllerState extends State<NavigationBarController> {
   final List<Widget> pages = [
-    Template(
+    NightMap(
       key: PageStorageKey('Page 1'),
     ),
-    Template(
+    NightMap(
       key: PageStorageKey('Page 2'),
     ),
     NightMap(
       key: PageStorageKey('Page 3'),
     ),
-    Template(
+    NightMap(
       key: PageStorageKey('Page 4'),
     ),
-    Template(
+    NightMap(
       key: PageStorageKey('Page 5'),
     ),
   ];

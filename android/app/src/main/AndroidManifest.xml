@@ -6,6 +6,11 @@
          additional functionality it is fine to subclass or reimplement
          FlutterApplication and put your custom class here. -->
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <application
         android:name="io.flutter.app.FlutterApplication"
         android:label="on_night"
@@ -45,6 +50,8 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyAFO7nYzXJJU17zcZjPIQZ9KrucNv6YbDA"/>
+<!--            android:value="AIzaSyAogxlCYlo-ZyuZqyOFM62Dtlk4aYlj9Tk"/>-->
+
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
