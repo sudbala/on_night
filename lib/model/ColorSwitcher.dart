@@ -1,4 +1,3 @@
-
 import 'package:flutter/cupertino.dart';
 
 class ColorSwitcher {
@@ -8,21 +7,19 @@ class ColorSwitcher {
   double opacity;
 
   // Constructor for the colorSwitcher
-  ColorSwitcher(this.openColor, this.closedColor, this.status);
-
-
-  void setStatus(bool status) {
-    this.status = status;
-
-    // Based on status, set the return color
-
-    if (status) {
+  ColorSwitcher(this.openColor, this.closedColor, this.status) {
+    // Based on status, change up the opacity
+    if (this.status) {
       returnColor = openColor;
       opacity = 0.35;
     } else {
       returnColor = closedColor;
       opacity = 0.5;
     }
+  }
+
+  void setStatus(bool status) {
+    this.status = status;
   }
 
   bool getStatus() {
@@ -36,5 +33,4 @@ class ColorSwitcher {
   double getOpacity() {
     return opacity;
   }
-
 }
