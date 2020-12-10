@@ -23,6 +23,7 @@ class _NightMapState extends State<NightMap> {
   Set<Polygon> _fratPolygons = HashSet<Polygon>();
   Map<String, GreekSpace> greekSpaceMap = HashMap<String, GreekSpace>();
   String _mapStyle;
+  double mapBottomPadding = 0;
 
   @override
   void initState() {
@@ -36,6 +37,9 @@ class _NightMapState extends State<NightMap> {
   void _onMapCreated(GoogleMapController controller) {
     _mapController = controller;
     _mapController.setMapStyle(_mapStyle);
+    setState(() {
+      mapBottomPadding = 50;
+    });
   }
 
   // Initializes the map of GreekSpaces from the databases
@@ -108,6 +112,7 @@ class _NightMapState extends State<NightMap> {
         builder: (context, snapshot) {
           return Stack(children: <Widget>[
             GoogleMap(
+              padding: EdgeInsets.only(bottom: mapBottomPadding, top: 0, right: 0, left: 0),
               compassEnabled: false,
               onMapCreated: _onMapCreated,
               buildingsEnabled: false,
