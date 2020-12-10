@@ -5,6 +5,7 @@ import 'ColorSwitcher.dart';
 /// and a status.
 class GreekSpace {
   // Instance vars/getters/setters
+
   String name;
   String get fratName => name;
   set fratName(String name) {
