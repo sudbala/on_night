@@ -6,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:on_night/model/ColorSwitcher.dart';
 import 'package:on_night/model/GreekSpace.dart';
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:on_night/widgets/darty_search_bar.dart';
 
 /// The NightMap is the Google Maps page that is displayed as the main page in
 /// OnNight
@@ -124,6 +125,7 @@ class _NightMapState extends State<NightMap> {
                 tilt: 6,
               ),
             ),
+            DartySearchBarScreen(),
             Positioned(
               bottom: 60,
               right: 10,

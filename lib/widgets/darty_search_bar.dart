@@ -146,10 +146,22 @@ class _DartySearchBarScreenState extends State<DartySearchBarScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: _buildBar(context),
-      body: tapped ? _buildList() : null,
-      resizeToAvoidBottomPadding: false,
-    );
+    if (tapped) {
+      return SizedBox(
+        height: 300,
+        width: MediaQuery.of(context).size.width,
+        child: Scaffold(
+          appBar: _buildBar(context),
+          body: tapped ? _buildList() : null,
+          backgroundColor: Colors.red,
+          resizeToAvoidBottomPadding: false,
+        ),
+      );
+    } else {
+      return SizedBox(
+          height: AppBar().preferredSize.height + MediaQuery.of(context).padding.top,
+          width: MediaQuery.of(context).size.width,
+          child: _buildBar(context));
+    }
   }
 }
