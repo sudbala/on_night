@@ -68,69 +68,69 @@ class _DartySearchBarScreenState extends State<DartySearchBarScreen> {
       elevation: 0,
       centerTitle: true,
       title: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          Align(
-            alignment: Alignment.center,
-            child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                Container(
-                  height: AppBar().preferredSize.height,
-                  alignment: Alignment.center,
-                  color: Colors.purple,
-                  child: SvgPicture.asset('assets/cup.svg',
-                      width: 40, height: 40, color: Colors.white70),
-                ),
-                AnimatedContainer(
-                  duration: Duration(milliseconds: 200),
-                  height: 50,
-                  width: 255,
-                  decoration: BoxDecoration(
-                    borderRadius: const BorderRadius.all(Radius.circular(50)),
-                    color: const Color.fromRGBO(142, 142, 147, .15),
+                Expanded(
+                  flex: 1,
+                  child: Container(
+                    height: AppBar().preferredSize.height,
+                    alignment: Alignment.center,
+                    child: SvgPicture.asset('assets/cup.svg',
+                        width: 40, height: 40, color: Colors.white70),
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(5.0),
-                    child: Theme(
-                      child: TextField(
-                        onTap: () {
-                          setState(() {
-                            tapped = true;
-                          });
-                        },
-                        onSubmitted: (value) {
-                          setState(() {
-                            tapped = false;
-                          });
-                        },
-                        controller: _filter,
-                        style: const TextStyle(color: Colors.black),
-                        decoration: InputDecoration(
-                          icon: const Icon(Icons.search),
-                          border: InputBorder.none,
-                          hintText: "Where would you like to go?",
-                          hintStyle: const TextStyle(
-                              color: Color.fromRGBO(142, 142, 147, 1)),
+                ),
+                Spacer(
+                  flex: 1
+                ),
+                Expanded(
+                  flex: 12,
+                  child: AnimatedContainer(
+                    duration: Duration(milliseconds: 200),
+                    height: 50,
+                    width: 255,
+                    decoration: BoxDecoration(
+                      borderRadius: const BorderRadius.all(Radius.circular(50)),
+                      color: const Color.fromRGBO(142, 142, 147, .15),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(5.0),
+                      child: Theme(
+                        child: TextField(
+                          onTap: () {
+                            setState(() {
+                              tapped = true;
+                            });
+                          },
+                          onSubmitted: (value) {
+                            setState(() {
+                              tapped = false;
+                            });
+                          },
+                          controller: _filter,
+                          style: const TextStyle(color: Colors.black),
+                          decoration: InputDecoration(
+                            icon: const Icon(Icons.search),
+                            border: InputBorder.none,
+                            hintText: "Where would you like to go?",
+                            hintStyle: const TextStyle(
+                                color: Color.fromRGBO(142, 142, 147, 1)),
+                          ),
                         ),
-                      ),
-                      data: Theme.of(context).copyWith(
-                        primaryColor: Colors.black,
+                        data: Theme.of(context).copyWith(
+                          primaryColor: Colors.black,
+                        ),
                       ),
                     ),
                   ),
                 ),
+                Spacer(flex: 1),
                 Container(
-                    height: AppBar().preferredSize.height,
-                    color: Colors.blue,
-                    child: SvgPicture.asset('assets/settings_gear.svg',
-                        width: 40, height: 40, color: Colors.white70),
-                  ),
+                      height: AppBar().preferredSize.height,
+                      child: SvgPicture.asset('assets/settings_gear.svg',
+                          width: 40, height: 40, color: Colors.white70),
+                    ),
               ],
-            ),
-          )
-        ],
       ),
     );
   }
