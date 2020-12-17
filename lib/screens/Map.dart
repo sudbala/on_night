@@ -135,29 +135,6 @@ class _NightMapState extends State<NightMap> {
                 backgroundColor: Color(0xff992181),
               ),
             ),
-            SafeArea(
-              child: Padding(
-                padding: const EdgeInsets.all(5.0),
-                child: Align(
-                  alignment: Alignment.topCenter,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Container(
-                        child: SvgPicture.asset('assets/cup.svg',
-                            width: 40, height: 40, color: Colors.white70),
-                      ),
-
-                      Container(
-                        child: SvgPicture.asset('assets/settings_gear.svg',
-                            width: 40, height: 40, color: Colors.white70),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
           ]);
         });
   }

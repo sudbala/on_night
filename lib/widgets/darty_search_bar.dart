@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 class DartySearchBarScreen extends StatefulWidget {
   final List<String> fratList = [
@@ -67,47 +68,68 @@ class _DartySearchBarScreenState extends State<DartySearchBarScreen> {
       elevation: 0,
       centerTitle: true,
       title: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          Flexible(
-            child: AnimatedContainer(
-              duration: Duration(milliseconds: 200),
-              width: widthMax,
-              decoration: BoxDecoration(
-                borderRadius: const BorderRadius.all(Radius.circular(50)),
-                color: const Color.fromRGBO(142, 142, 147, .15),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(5.0),
-                child: Theme(
-                  child: TextField(
-                    onTap: () {
-                      setState(() {
-                        tapped = true;
-                      });
-                    },
-                    onSubmitted: (value) {
-                      setState(() {
-                        tapped = false;
-                      });
-                    },
-                    controller: _filter,
-                    style: const TextStyle(color: Colors.black),
-                    decoration: InputDecoration(
-                      icon: const Icon(Icons.search),
-                      border: InputBorder.none,
-                      hintText: "Where would you like to go today?",
-                      hintStyle: const TextStyle(
-                          color: Color.fromRGBO(142, 142, 147, 1)),
+          Align(
+            alignment: Alignment.center,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Container(
+                  height: AppBar().preferredSize.height,
+                  alignment: Alignment.center,
+                  color: Colors.purple,
+                  child: SvgPicture.asset('assets/cup.svg',
+                      width: 40, height: 40, color: Colors.white70),
+                ),
+                AnimatedContainer(
+                  duration: Duration(milliseconds: 200),
+                  height: 50,
+                  width: 255,
+                  decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.all(Radius.circular(50)),
+                    color: const Color.fromRGBO(142, 142, 147, .15),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(5.0),
+                    child: Theme(
+                      child: TextField(
+                        onTap: () {
+                          setState(() {
+                            tapped = true;
+                          });
+                        },
+                        onSubmitted: (value) {
+                          setState(() {
+                            tapped = false;
+                          });
+                        },
+                        controller: _filter,
+                        style: const TextStyle(color: Colors.black),
+                        decoration: InputDecoration(
+                          icon: const Icon(Icons.search),
+                          border: InputBorder.none,
+                          hintText: "Where would you like to go?",
+                          hintStyle: const TextStyle(
+                              color: Color.fromRGBO(142, 142, 147, 1)),
+                        ),
+                      ),
+                      data: Theme.of(context).copyWith(
+                        primaryColor: Colors.black,
+                      ),
                     ),
                   ),
-                  data: Theme.of(context).copyWith(
-                    primaryColor: Colors.black,
-                  ),
                 ),
-              ),
+                Container(
+                    height: AppBar().preferredSize.height,
+                    color: Colors.blue,
+                    child: SvgPicture.asset('assets/settings_gear.svg',
+                        width: 40, height: 40, color: Colors.white70),
+                  ),
+              ],
             ),
-          ),
+          )
         ],
       ),
     );
@@ -159,7 +181,8 @@ class _DartySearchBarScreenState extends State<DartySearchBarScreen> {
       );
     } else {
       return SizedBox(
-          height: AppBar().preferredSize.height + MediaQuery.of(context).padding.top,
+          height: AppBar().preferredSize.height +
+              MediaQuery.of(context).padding.top,
           width: MediaQuery.of(context).size.width,
           child: _buildBar(context));
     }
