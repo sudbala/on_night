@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:on_night/widgets/NavigationBarController.dart';
 
 class DartySearchBarScreen extends StatefulWidget {
   final List<String> fratList = [
@@ -17,7 +18,8 @@ class DartySearchBarScreen extends StatefulWidget {
   _DartySearchBarScreenState createState() => _DartySearchBarScreenState();
 }
 
-class _DartySearchBarScreenState extends State<DartySearchBarScreen> {
+class _DartySearchBarScreenState extends State<DartySearchBarScreen>
+    with TickerProviderStateMixin {
   // Text editing controller for the text field
   final TextEditingController _filter = TextEditingController();
   bool tapped = false;
@@ -68,76 +70,81 @@ class _DartySearchBarScreenState extends State<DartySearchBarScreen> {
       elevation: 0,
       centerTitle: true,
       title: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                Expanded(
-                  flex: 1,
-                  child: Container(
-                    height: AppBar().preferredSize.height,
-                    alignment: Alignment.center,
-                    child: SvgPicture.asset('assets/cup.svg',
-                        width: 40, height: 40, color: Colors.white70),
-                  ),
-                ),
-                Spacer(
-                  flex: 1
-                ),
-                Expanded(
-                  flex: 12,
-                  child: AnimatedContainer(
-                    duration: Duration(milliseconds: 200),
-                    height: 50,
-                    width: 255,
-                    decoration: BoxDecoration(
-                      borderRadius: const BorderRadius.all(Radius.circular(50)),
-                      color: const Color.fromRGBO(142, 142, 147, .15),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(5.0),
-                      child: Theme(
-                        child: TextField(
-                          onTap: () {
-                            setState(() {
-                              tapped = true;
-                            });
-                          },
-                          onSubmitted: (value) {
-                            setState(() {
-                              tapped = false;
-                            });
-                          },
-                          controller: _filter,
-                          style: const TextStyle(color: Colors.black),
-                          decoration: InputDecoration(
-                            icon: const Icon(Icons.search),
-                            border: InputBorder.none,
-                            hintText: "Where would you like to go?",
-                            hintStyle: const TextStyle(
-                                color: Color.fromRGBO(142, 142, 147, 1)),
-                          ),
-                        ),
-                        data: Theme.of(context).copyWith(
-                          primaryColor: Colors.black,
-                        ),
-                      ),
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Expanded(
+            flex: 1,
+            child: Container(
+              height: AppBar().preferredSize.height,
+              alignment: Alignment.center,
+              child: SvgPicture.asset('assets/cup.svg',
+                  width: 40, height: 40, color: Colors.white70),
+            ),
+          ),
+          Spacer(flex: 1),
+          Expanded(
+            flex: 12,
+            child: AnimatedContainer(
+              duration: Duration(milliseconds: 200),
+              height: 50,
+              width: 255,
+              decoration: BoxDecoration(
+                borderRadius: const BorderRadius.all(Radius.circular(50)),
+                color: const Color.fromRGBO(142, 142, 147, .15),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(5.0),
+                child: Theme(
+                  child: TextField(
+                    onTap: () {
+                      setState(() {
+                        tapped = true;
+                      });
+                    },
+                    onSubmitted: (value) {
+                      setState(() {
+                        tapped = false;
+                      });
+                    },
+                    controller: _filter,
+                    style: const TextStyle(color: Colors.white),
+                    decoration: InputDecoration(
+                      icon: const Icon(Icons.search),
+                      border: InputBorder.none,
+                      hintText: "Where would you like to go?",
+                      hintStyle: const TextStyle(
+                          color: Color.fromRGBO(142, 142, 147, 1)),
                     ),
                   ),
+                  data: Theme.of(context).copyWith(
+                    primaryColor: Colors.black,
+                  ),
                 ),
-                Spacer(flex: 1),
-                Container(
-                      height: AppBar().preferredSize.height,
-                      child: SvgPicture.asset('assets/settings_gear.svg',
-                          width: 40, height: 40, color: Colors.white70),
-                    ),
-              ],
+              ),
+            ),
+          ),
+          Spacer(flex: 1),
+          Container(
+            height: AppBar().preferredSize.height,
+            child: tapped
+                ? CloseButton(
+                    color: Colors.white70,
+                    onPressed: () {
+                      setState(() {
+                        tapped = false;
+                      });
+                    })
+                : SvgPicture.asset('assets/settings_gear.svg',
+                    width: 40, height: 40, color: Colors.white70),
+          ),
+        ],
       ),
     );
   }
 
   Widget _buildList() {
     // Build the filtered list of things we want to display
-    print(_searchText);
     // If searchText is not empty
     if (_searchText.length != 0) {
       List tempList = List();
@@ -156,7 +163,8 @@ class _DartySearchBarScreenState extends State<DartySearchBarScreen> {
       itemCount: filteredList.length,
       itemBuilder: (context, index) {
         return ListTile(
-          title: Text(filteredList[index]),
+          title:
+              Text(filteredList[index], style: TextStyle(color: Colors.white)),
           onTap: () {
             Navigator.push(context,
                 MaterialPageRoute(builder: (context) => Placeholder()));
@@ -168,23 +176,25 @@ class _DartySearchBarScreenState extends State<DartySearchBarScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if (tapped) {
-      return SizedBox(
-        height: 300,
+
+    print(_searchText);
+    print(filteredList);
+
+    return AnimatedContainer(
+      height: tapped
+          ? 60.0 * filteredList.length + AppBar().preferredSize.height + MediaQuery.of(context).padding.top
+          : AppBar().preferredSize.height + MediaQuery.of(context).padding.top,
+      child: SizedBox(
+        height: 60.0 * filteredList.length,
         width: MediaQuery.of(context).size.width,
         child: Scaffold(
           appBar: _buildBar(context),
-          body: tapped ? _buildList() : null,
-          backgroundColor: Colors.red,
+          body: _buildList(),
+          backgroundColor: darkCornColor,
           resizeToAvoidBottomPadding: false,
         ),
-      );
-    } else {
-      return SizedBox(
-          height: AppBar().preferredSize.height +
-              MediaQuery.of(context).padding.top,
-          width: MediaQuery.of(context).size.width,
-          child: _buildBar(context));
-    }
+      ),
+      duration: Duration(milliseconds: 400),
+    );
   }
 }

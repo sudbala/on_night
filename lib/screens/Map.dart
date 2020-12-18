@@ -108,6 +108,8 @@ class _NightMapState extends State<NightMap> {
   Widget build(BuildContext context) {
     // Sud learned about FutureBuilder!!! Maria will be proud of sud!
     // Maria is proud of sud! omg! :) <3 8/5/20
+    bool tapped = false;
+
     return FutureBuilder(
         future: _setPolygons(),
         builder: (context, snapshot) {
