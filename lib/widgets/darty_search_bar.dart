@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:on_night/widgets/NavigationBarController.dart';
 
 class DartySearchBarScreen extends StatefulWidget {
   final List<String> fratList = [
@@ -17,7 +18,8 @@ class DartySearchBarScreen extends StatefulWidget {
   _DartySearchBarScreenState createState() => _DartySearchBarScreenState();
 }
 
-class _DartySearchBarScreenState extends State<DartySearchBarScreen> with TickerProviderStateMixin {
+class _DartySearchBarScreenState extends State<DartySearchBarScreen>
+    with TickerProviderStateMixin {
   // Text editing controller for the text field
   final TextEditingController _filter = TextEditingController();
   bool tapped = false;
@@ -62,10 +64,7 @@ class _DartySearchBarScreenState extends State<DartySearchBarScreen> with Ticker
   }
 
   Widget _buildBar(BuildContext context) {
-    final widthMax = MediaQuery
-        .of(context)
-        .size
-        .width;
+    final widthMax = MediaQuery.of(context).size.width;
     return AppBar(
       backgroundColor: Colors.transparent,
       elevation: 0,
@@ -83,9 +82,7 @@ class _DartySearchBarScreenState extends State<DartySearchBarScreen> with Ticker
                   width: 40, height: 40, color: Colors.white70),
             ),
           ),
-          Spacer(
-              flex: 1
-          ),
+          Spacer(flex: 1),
           Expanded(
             flex: 12,
             child: AnimatedContainer(
@@ -111,7 +108,7 @@ class _DartySearchBarScreenState extends State<DartySearchBarScreen> with Ticker
                       });
                     },
                     controller: _filter,
-                    style: const TextStyle(color: Colors.black),
+                    style: const TextStyle(color: Colors.white),
                     decoration: InputDecoration(
                       icon: const Icon(Icons.search),
                       border: InputBorder.none,
@@ -130,8 +127,16 @@ class _DartySearchBarScreenState extends State<DartySearchBarScreen> with Ticker
           Spacer(flex: 1),
           Container(
             height: AppBar().preferredSize.height,
-            child: SvgPicture.asset('assets/settings_gear.svg',
-                width: 40, height: 40, color: Colors.white70),
+            child: tapped
+                ? CloseButton(
+                    color: Colors.white70,
+                    onPressed: () {
+                      setState(() {
+                        tapped = false;
+                      });
+                    })
+                : SvgPicture.asset('assets/settings_gear.svg',
+                    width: 40, height: 40, color: Colors.white70),
           ),
         ],
       ),
@@ -140,7 +145,6 @@ class _DartySearchBarScreenState extends State<DartySearchBarScreen> with Ticker
 
   Widget _buildList() {
     // Build the filtered list of things we want to display
-    print(_searchText);
     // If searchText is not empty
     if (_searchText.length != 0) {
       List tempList = List();
@@ -159,7 +163,8 @@ class _DartySearchBarScreenState extends State<DartySearchBarScreen> with Ticker
       itemCount: filteredList.length,
       itemBuilder: (context, index) {
         return ListTile(
-          title: Text(filteredList[index]),
+          title:
+              Text(filteredList[index], style: TextStyle(color: Colors.white)),
           onTap: () {
             Navigator.push(context,
                 MaterialPageRoute(builder: (context) => Placeholder()));
@@ -171,80 +176,25 @@ class _DartySearchBarScreenState extends State<DartySearchBarScreen> with Ticker
 
   @override
   Widget build(BuildContext context) {
-    AnimationController _controller;
-    Animation<Offset> _animation;
 
-    _controller = AnimationController(
-      duration: const Duration(seconds: 3),
-      vsync: this,
-    )..forward();
+    print(_searchText);
+    print(filteredList);
 
-    _animation = Tween<Offset>(
-      begin: const Offset(0.0, 0.0),
-      end: const Offset(0.0, 0.5),
-    ).animate(CurvedAnimation(
-      parent: _controller,
-      curve: Curves.easeInCubic,
-    ));
-
-
-    return AnimatedSwitcher(
-      child: tapped ? SizedBox(
-        key: ValueKey<int>(0),
-        height: 300,
-        width: MediaQuery
-            .of(context)
-            .size
-            .width,
+    return AnimatedContainer(
+      height: tapped
+          ? 60.0 * filteredList.length + AppBar().preferredSize.height + MediaQuery.of(context).padding.top
+          : AppBar().preferredSize.height + MediaQuery.of(context).padding.top,
+      child: SizedBox(
+        height: 60.0 * filteredList.length,
+        width: MediaQuery.of(context).size.width,
         child: Scaffold(
           appBar: _buildBar(context),
-          body: tapped ? _buildList() : null,
-          backgroundColor: Colors.red,
+          body: _buildList(),
+          backgroundColor: darkCornColor,
           resizeToAvoidBottomPadding: false,
         ),
-      )
-          : SizedBox(
-          key: ValueKey<int>(1),
-          height: AppBar().preferredSize.height +
-              MediaQuery
-                  .of(context)
-                  .padding
-                  .top,
-          width: MediaQuery
-              .of(context)
-              .size
-              .width,
-          child: _buildBar(context)),
-      duration: Duration(seconds: 1),
-      transitionBuilder: (Widget child, Animation<double> animation) {
-        return SlideTransition(
-          position: _animation,
-          child: child
-        );
-      },
+      ),
+      duration: Duration(milliseconds: 400),
     );
   }
 }
-
-
-
-
-
-
-
-//  Widget build(BuildContext context) {
-//    if (tapped) {
-//      return SizedBox(
-//        height: 300,
-//        width: MediaQuery.of(context).size.width,
-//        child: Scaffold(
-//          appBar: _buildBar(context),
-//          body: tapped ? _buildList() : null,
-//          backgroundColor: Colors.red,
-//          resizeToAvoidBottomPadding: false,
-//        ),
-//      );
-//    } else {
-//
-//  }
-//}
