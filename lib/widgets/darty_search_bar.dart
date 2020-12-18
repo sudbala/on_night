@@ -17,7 +17,7 @@ class DartySearchBarScreen extends StatefulWidget {
   _DartySearchBarScreenState createState() => _DartySearchBarScreenState();
 }
 
-class _DartySearchBarScreenState extends State<DartySearchBarScreen> {
+class _DartySearchBarScreenState extends State<DartySearchBarScreen> with TickerProviderStateMixin {
   // Text editing controller for the text field
   final TextEditingController _filter = TextEditingController();
   bool tapped = false;
@@ -62,75 +62,78 @@ class _DartySearchBarScreenState extends State<DartySearchBarScreen> {
   }
 
   Widget _buildBar(BuildContext context) {
-    final widthMax = MediaQuery.of(context).size.width;
+    final widthMax = MediaQuery
+        .of(context)
+        .size
+        .width;
     return AppBar(
       backgroundColor: Colors.transparent,
       elevation: 0,
       centerTitle: true,
       title: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                Expanded(
-                  flex: 1,
-                  child: Container(
-                    height: AppBar().preferredSize.height,
-                    alignment: Alignment.center,
-                    child: SvgPicture.asset('assets/cup.svg',
-                        width: 40, height: 40, color: Colors.white70),
-                  ),
-                ),
-                Spacer(
-                  flex: 1
-                ),
-                Expanded(
-                  flex: 12,
-                  child: AnimatedContainer(
-                    duration: Duration(milliseconds: 200),
-                    height: 50,
-                    width: 255,
-                    decoration: BoxDecoration(
-                      borderRadius: const BorderRadius.all(Radius.circular(50)),
-                      color: const Color.fromRGBO(142, 142, 147, .15),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(5.0),
-                      child: Theme(
-                        child: TextField(
-                          onTap: () {
-                            setState(() {
-                              tapped = true;
-                            });
-                          },
-                          onSubmitted: (value) {
-                            setState(() {
-                              tapped = false;
-                            });
-                          },
-                          controller: _filter,
-                          style: const TextStyle(color: Colors.black),
-                          decoration: InputDecoration(
-                            icon: const Icon(Icons.search),
-                            border: InputBorder.none,
-                            hintText: "Where would you like to go?",
-                            hintStyle: const TextStyle(
-                                color: Color.fromRGBO(142, 142, 147, 1)),
-                          ),
-                        ),
-                        data: Theme.of(context).copyWith(
-                          primaryColor: Colors.black,
-                        ),
-                      ),
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Expanded(
+            flex: 1,
+            child: Container(
+              height: AppBar().preferredSize.height,
+              alignment: Alignment.center,
+              child: SvgPicture.asset('assets/cup.svg',
+                  width: 40, height: 40, color: Colors.white70),
+            ),
+          ),
+          Spacer(
+              flex: 1
+          ),
+          Expanded(
+            flex: 12,
+            child: AnimatedContainer(
+              duration: Duration(milliseconds: 200),
+              height: 50,
+              width: 255,
+              decoration: BoxDecoration(
+                borderRadius: const BorderRadius.all(Radius.circular(50)),
+                color: const Color.fromRGBO(142, 142, 147, .15),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(5.0),
+                child: Theme(
+                  child: TextField(
+                    onTap: () {
+                      setState(() {
+                        tapped = true;
+                      });
+                    },
+                    onSubmitted: (value) {
+                      setState(() {
+                        tapped = false;
+                      });
+                    },
+                    controller: _filter,
+                    style: const TextStyle(color: Colors.black),
+                    decoration: InputDecoration(
+                      icon: const Icon(Icons.search),
+                      border: InputBorder.none,
+                      hintText: "Where would you like to go?",
+                      hintStyle: const TextStyle(
+                          color: Color.fromRGBO(142, 142, 147, 1)),
                     ),
                   ),
+                  data: Theme.of(context).copyWith(
+                    primaryColor: Colors.black,
+                  ),
                 ),
-                Spacer(flex: 1),
-                Container(
-                      height: AppBar().preferredSize.height,
-                      child: SvgPicture.asset('assets/settings_gear.svg',
-                          width: 40, height: 40, color: Colors.white70),
-                    ),
-              ],
+              ),
+            ),
+          ),
+          Spacer(flex: 1),
+          Container(
+            height: AppBar().preferredSize.height,
+            child: SvgPicture.asset('assets/settings_gear.svg',
+                width: 40, height: 40, color: Colors.white70),
+          ),
+        ],
       ),
     );
   }
@@ -168,23 +171,80 @@ class _DartySearchBarScreenState extends State<DartySearchBarScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if (tapped) {
-      return SizedBox(
+    AnimationController _controller;
+    Animation<Offset> _animation;
+
+    _controller = AnimationController(
+      duration: const Duration(seconds: 3),
+      vsync: this,
+    )..forward();
+
+    _animation = Tween<Offset>(
+      begin: const Offset(0.0, 0.0),
+      end: const Offset(0.0, 0.5),
+    ).animate(CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeInCubic,
+    ));
+
+
+    return AnimatedSwitcher(
+      child: tapped ? SizedBox(
+        key: ValueKey<int>(0),
         height: 300,
-        width: MediaQuery.of(context).size.width,
+        width: MediaQuery
+            .of(context)
+            .size
+            .width,
         child: Scaffold(
           appBar: _buildBar(context),
           body: tapped ? _buildList() : null,
           backgroundColor: Colors.red,
           resizeToAvoidBottomPadding: false,
         ),
-      );
-    } else {
-      return SizedBox(
+      )
+          : SizedBox(
+          key: ValueKey<int>(1),
           height: AppBar().preferredSize.height +
-              MediaQuery.of(context).padding.top,
-          width: MediaQuery.of(context).size.width,
-          child: _buildBar(context));
-    }
+              MediaQuery
+                  .of(context)
+                  .padding
+                  .top,
+          width: MediaQuery
+              .of(context)
+              .size
+              .width,
+          child: _buildBar(context)),
+      duration: Duration(seconds: 1),
+      transitionBuilder: (Widget child, Animation<double> animation) {
+        return SlideTransition(
+          position: _animation,
+          child: child
+        );
+      },
+    );
   }
 }
+
+
+
+
+
+
+
+//  Widget build(BuildContext context) {
+//    if (tapped) {
+//      return SizedBox(
+//        height: 300,
+//        width: MediaQuery.of(context).size.width,
+//        child: Scaffold(
+//          appBar: _buildBar(context),
+//          body: tapped ? _buildList() : null,
+//          backgroundColor: Colors.red,
+//          resizeToAvoidBottomPadding: false,
+//        ),
+//      );
+//    } else {
+//
+//  }
+//}
