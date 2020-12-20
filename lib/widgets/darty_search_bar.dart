@@ -164,104 +164,37 @@ class _DartySearchBarScreenState extends State<DartySearchBarScreen>
     );
   }
 
-  Future<List<String>> queryGreekSpaces(String queryString) async {
-    List<String> mySuggestionList = [];
-    Set<String> mySuggestionSet = Set();
-
-    if (queryString.isNotEmpty) {
-      List<QueryDocumentSnapshot> documentListOfCommonNames =
-          (await FirebaseFirestore.instance
-                  .collection('GreekSpaces')
-                  .where('Common Name', isGreaterThanOrEqualTo: queryString)
-                  .where('Common Name', isLessThan: queryString + 'z')
-                  .get())
-              .docs;
-      print(documentListOfCommonNames);
-      /// Add docs to set
-      documentListOfCommonNames.forEach((element) {
-        mySuggestionSet.add(element.get('Common Name'));
-        mySuggestionList.add(element.get('Common Name'));
-      });
-      print("First Query" + mySuggestionList.toString());
-
-      List<QueryDocumentSnapshot> documentListOfAllNames =
-          (await FirebaseFirestore.instance
-                  .collection('GreekSpaces')
-                  .where('OtherNames', isGreaterThanOrEqualTo: queryString)
-                  .where('OtherNames', isLessThan: queryString + 'z')
-                  .get())
-              .docs;
-      /// Once again we add, but this time check if already in set
-      documentListOfAllNames.forEach((element) {
-        if (!mySuggestionSet.contains(element.get('Common Name'))) {
-          mySuggestionList.add(element.get('Common Name'));
-        }
-      });
-      print("After Second Query" + mySuggestionList.toString());
-      mySuggestionSet.clear();
-    }
-    return mySuggestionList;
-  }
-
   Widget _buildList() {
-    /// Here we build the list based on whatever the suggestion list is set to
-    /// We use a future builder so that we reset once suggestions have been
-    /// updated to whatever queryGreekSpaces returns.
-    return FutureBuilder<List>(
-      future: queryGreekSpaces(_searchText.toLowerCase()),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          filteredList = snapshot.data;
-          print(filteredList);
-        } else if (snapshot.hasError) {
-          print(snapshot.error);
-        } else {
-          filteredList = [];
+
+
+    // Build the filtered list of things we want to display
+    // If searchText is not empty
+    if (_searchText.length != 0) {
+      List tempList = List();
+      for (int i = 0; i < searchItemList.length; i++) {
+        if (searchItemList[i]
+            .toString()
+            .toLowerCase()
+            .contains(_searchText.toLowerCase())) {
+          tempList.add(searchItemList[i]);
         }
-        return ListView.builder(
-          itemCount: filteredList.length,
-          itemBuilder: (context, index) {
-            return ListTile(
-              title: Text(filteredList[index],
-                  style: TextStyle(color: Colors.white)),
-              onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => Placeholder()));
-              },
-            );
+      }
+      filteredList = tempList;
+    }
+
+    return ListView.builder(
+      itemCount: filteredList.length,
+      itemBuilder: (context, index) {
+        return ListTile(
+          title:
+              Text(filteredList[index], style: TextStyle(color: Colors.white)),
+          onTap: () {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => Placeholder()));
           },
         );
       },
     );
-
-    // Build the filtered list of things we want to display
-    // If searchText is not empty
-//    if (_searchText.length != 0) {
-//      List tempList = List();
-//      for (int i = 0; i < searchItemList.length; i++) {
-//        if (searchItemList[i]
-//            .toString()
-//            .toLowerCase()
-//            .contains(_searchText.toLowerCase())) {
-//          tempList.add(searchItemList[i]);
-//        }
-//      }
-//      filteredList = tempList;
-//    }
-//
-//    return ListView.builder(
-//      itemCount: filteredList.length,
-//      itemBuilder: (context, index) {
-//        return ListTile(
-//          title:
-//              Text(filteredList[index], style: TextStyle(color: Colors.white)),
-//          onTap: () {
-//            Navigator.push(context,
-//                MaterialPageRoute(builder: (context) => Placeholder()));
-//          },
-//        );
-//      },
-//    );
   }
 
   @override
@@ -277,7 +210,7 @@ class _DartySearchBarScreenState extends State<DartySearchBarScreen>
         builder: (context, snapshot) {
           return AnimatedContainer(
             height: DartySearchBarScreen.tapped
-                ? 100 * filteredList.length +
+                ? 60.0 * filteredList.length +
                     AppBar().preferredSize.height +
                     MediaQuery.of(context).padding.top
                 : AppBar().preferredSize.height +
