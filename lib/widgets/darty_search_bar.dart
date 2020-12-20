@@ -5,12 +5,12 @@ import 'dart:collection';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class DartySearchBarScreen extends StatefulWidget {
-
   // this stores what type of search bar we need, for now the only option is map
   // in the future, this may be friends or other data types
   // trying to make it modularizable :)
 
   final String type;
+  static bool tapped = false;
   // passed in from calling screen
   DartySearchBarScreen({this.type});
 
@@ -22,7 +22,6 @@ class _DartySearchBarScreenState extends State<DartySearchBarScreen>
     with TickerProviderStateMixin {
   // Text editing controller for the text field
   final TextEditingController _filter = TextEditingController();
-  bool tapped = false;
 
   // list of common search terms (gdx, tri-kap, tabard; not the nicknames)
   // these are the ones visible in the UI
@@ -59,17 +58,16 @@ class _DartySearchBarScreenState extends State<DartySearchBarScreen>
         .collection('GreekSpaces')
         .get()
         .then((element) => {
-      element.docs.forEach((result) async {
-        dataMap = result.data();
-        // if we already have added this frat, don't do it again
-        if (searchItemList.contains(dataMap['Common Name'])){
-        } else {
-          searchItemList.add(dataMap['Common Name']);
-        }
-      })
-    });
+              element.docs.forEach((result) async {
+                dataMap = result.data();
+                // if we already have added this frat, don't do it again
+                if (searchItemList.contains(dataMap['Common Name'])) {
+                } else {
+                  searchItemList.add(dataMap['Common Name']);
+                }
+              })
+            });
   }
-
 
   void _getList() async {
     setState(() {
@@ -121,12 +119,12 @@ class _DartySearchBarScreenState extends State<DartySearchBarScreen>
                   child: TextField(
                     onTap: () {
                       setState(() {
-                        tapped = true;
+                        DartySearchBarScreen.tapped = true;
                       });
                     },
                     onSubmitted: (value) {
                       setState(() {
-                        tapped = false;
+                        DartySearchBarScreen.tapped = false;
                       });
                     },
                     controller: _filter,
@@ -149,12 +147,13 @@ class _DartySearchBarScreenState extends State<DartySearchBarScreen>
           Spacer(flex: 1),
           Container(
             height: AppBar().preferredSize.height,
-            child: tapped
+            child: DartySearchBarScreen.tapped
                 ? CloseButton(
                     color: Colors.white70,
                     onPressed: () {
                       setState(() {
-                        tapped = false;
+                        DartySearchBarScreen.tapped = false;
+                        FocusScope.of(context).unfocus();
                       });
                     })
                 : SvgPicture.asset('assets/settings_gear.svg',
@@ -165,35 +164,104 @@ class _DartySearchBarScreenState extends State<DartySearchBarScreen>
     );
   }
 
-  Widget _buildList() {
-    // Build the filtered list of things we want to display
-    // If searchText is not empty
-    if (_searchText.length != 0) {
-      List tempList = List();
-      for (int i = 0; i < searchItemList.length; i++) {
-        if (searchItemList[i]
-            .toString()
-            .toLowerCase()
-            .contains(_searchText.toLowerCase())) {
-          tempList.add(searchItemList[i]);
-        }
-      }
-      filteredList = tempList;
-    }
+  Future<List<String>> queryGreekSpaces(String queryString) async {
+    List<String> mySuggestionList = [];
+    Set<String> mySuggestionSet = Set();
 
-    return ListView.builder(
-      itemCount: filteredList.length,
-      itemBuilder: (context, index) {
-        return ListTile(
-          title:
-              Text(filteredList[index], style: TextStyle(color: Colors.white)),
-          onTap: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => Placeholder()));
+    if (queryString.isNotEmpty) {
+      List<QueryDocumentSnapshot> documentListOfCommonNames =
+          (await FirebaseFirestore.instance
+                  .collection('GreekSpaces')
+                  .where('Common Name', isGreaterThanOrEqualTo: queryString)
+                  .where('Common Name', isLessThan: queryString + 'z')
+                  .get())
+              .docs;
+      print(documentListOfCommonNames);
+      /// Add docs to set
+      documentListOfCommonNames.forEach((element) {
+        mySuggestionSet.add(element.get('Common Name'));
+        mySuggestionList.add(element.get('Common Name'));
+      });
+      print("First Query" + mySuggestionList.toString());
+
+      List<QueryDocumentSnapshot> documentListOfAllNames =
+          (await FirebaseFirestore.instance
+                  .collection('GreekSpaces')
+                  .where('OtherNames', isGreaterThanOrEqualTo: queryString)
+                  .where('OtherNames', isLessThan: queryString + 'z')
+                  .get())
+              .docs;
+      /// Once again we add, but this time check if already in set
+      documentListOfAllNames.forEach((element) {
+        if (!mySuggestionSet.contains(element.get('Common Name'))) {
+          mySuggestionList.add(element.get('Common Name'));
+        }
+      });
+      print("After Second Query" + mySuggestionList.toString());
+      mySuggestionSet.clear();
+    }
+    return mySuggestionList;
+  }
+
+  Widget _buildList() {
+    /// Here we build the list based on whatever the suggestion list is set to
+    /// We use a future builder so that we reset once suggestions have been
+    /// updated to whatever queryGreekSpaces returns.
+    return FutureBuilder<List>(
+      future: queryGreekSpaces(_searchText.toLowerCase()),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          filteredList = snapshot.data;
+          print(filteredList);
+        } else if (snapshot.hasError) {
+          print(snapshot.error);
+        } else {
+          filteredList = [];
+        }
+        return ListView.builder(
+          itemCount: filteredList.length,
+          itemBuilder: (context, index) {
+            return ListTile(
+              title: Text(filteredList[index],
+                  style: TextStyle(color: Colors.white)),
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => Placeholder()));
+              },
+            );
           },
         );
       },
     );
+
+    // Build the filtered list of things we want to display
+    // If searchText is not empty
+//    if (_searchText.length != 0) {
+//      List tempList = List();
+//      for (int i = 0; i < searchItemList.length; i++) {
+//        if (searchItemList[i]
+//            .toString()
+//            .toLowerCase()
+//            .contains(_searchText.toLowerCase())) {
+//          tempList.add(searchItemList[i]);
+//        }
+//      }
+//      filteredList = tempList;
+//    }
+//
+//    return ListView.builder(
+//      itemCount: filteredList.length,
+//      itemBuilder: (context, index) {
+//        return ListTile(
+//          title:
+//              Text(filteredList[index], style: TextStyle(color: Colors.white)),
+//          onTap: () {
+//            Navigator.push(context,
+//                MaterialPageRoute(builder: (context) => Placeholder()));
+//          },
+//        );
+//      },
+//    );
   }
 
   @override
@@ -201,29 +269,31 @@ class _DartySearchBarScreenState extends State<DartySearchBarScreen>
   // Sud is a m a z i n g <3
   // 12/19/20 *hug*
   Widget build(BuildContext context) {
-
     print(_searchText);
     print(filteredList);
 
     return FutureBuilder(
-      future: _setSearch(),
-      builder: (context, snapshot) {
-      return AnimatedContainer(
-        height: tapped
-            ? 60.0 * filteredList.length + AppBar().preferredSize.height + MediaQuery.of(context).padding.top
-            : AppBar().preferredSize.height + MediaQuery.of(context).padding.top,
-        child: SizedBox(
-          height: 60.0 * filteredList.length,
-          width: MediaQuery.of(context).size.width,
-          child: Scaffold(
-            appBar: _buildBar(context),
-            body: _buildList(),
-            backgroundColor: darkCornColor,
-            resizeToAvoidBottomPadding: false,
-          ),
-        ),
-        duration: Duration(milliseconds: 400),
-      );
-    });
+        future: _setSearch(),
+        builder: (context, snapshot) {
+          return AnimatedContainer(
+            height: DartySearchBarScreen.tapped
+                ? 100 * filteredList.length +
+                    AppBar().preferredSize.height +
+                    MediaQuery.of(context).padding.top
+                : AppBar().preferredSize.height +
+                    MediaQuery.of(context).padding.top,
+            child: SizedBox(
+              height: 60.0 * filteredList.length,
+              width: MediaQuery.of(context).size.width,
+              child: Scaffold(
+                appBar: _buildBar(context),
+                body: _buildList(),
+                backgroundColor: darkCornColor,
+                resizeToAvoidBottomPadding: false,
+              ),
+            ),
+            duration: Duration(milliseconds: 400),
+          );
+        });
   }
 }
