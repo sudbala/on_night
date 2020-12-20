@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:on_night/widgets/NavigationBarController.dart';
+import 'dart:collection';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class DartySearchBarScreen extends StatefulWidget {
-  final List<String> fratList = [
-    "Tri-Kap",
-    "Kappa",
-    "BG",
-    "Chi-Delt",
-    "Tabard",
-    "GDX",
-    "TDX",
-    "Maria Roodnitsky",
-    "Sudharsan Balasubramani"
-  ];
+
+  // this stores what type of search bar we need, for now the only option is map
+  // in the future, this may be friends or other data types
+  // trying to make it modularizable :)
+
+  final String type;
+  // passed in from calling screen
+  DartySearchBarScreen({this.type});
+
   @override
   _DartySearchBarScreenState createState() => _DartySearchBarScreenState();
 }
@@ -24,11 +24,12 @@ class _DartySearchBarScreenState extends State<DartySearchBarScreen>
   final TextEditingController _filter = TextEditingController();
   bool tapped = false;
 
+  // list of common search terms (gdx, tri-kap, tabard; not the nicknames)
+  // these are the ones visible in the UI
+  List<String> searchItemList = List();
+
   // Search text
   String _searchText = "";
-
-  // Widget that acts as the title of an appbar.
-  Widget _appBarTitle;
 
   // filtered list of Strings
   List filteredList = List();
@@ -39,7 +40,7 @@ class _DartySearchBarScreenState extends State<DartySearchBarScreen>
       if (_filter.text.isEmpty) {
         setState(() {
           _searchText = "";
-          filteredList = widget.fratList;
+          filteredList = searchItemList;
         });
       } else {
         setState(() {
@@ -49,9 +50,30 @@ class _DartySearchBarScreenState extends State<DartySearchBarScreen>
     });
   }
 
+  // this is the future of the search terms! We want them before people can search :)
+  Future<void> _setSearch() async {
+    // Get all data. An async call on another thread and acts as a future call
+    Map<String, dynamic> dataMap = new HashMap<String, dynamic>();
+
+    var result = await FirebaseFirestore.instance
+        .collection('GreekSpaces')
+        .get()
+        .then((element) => {
+      element.docs.forEach((result) async {
+        dataMap = result.data();
+        // if we already have added this frat, don't do it again
+        if (searchItemList.contains(dataMap['Common Name'])){
+        } else {
+          searchItemList.add(dataMap['Common Name']);
+        }
+      })
+    });
+  }
+
+
   void _getList() async {
     setState(() {
-      filteredList = widget.fratList;
+      filteredList = searchItemList;
     });
   }
 
@@ -148,12 +170,12 @@ class _DartySearchBarScreenState extends State<DartySearchBarScreen>
     // If searchText is not empty
     if (_searchText.length != 0) {
       List tempList = List();
-      for (int i = 0; i < widget.fratList.length; i++) {
-        if (widget.fratList[i]
+      for (int i = 0; i < searchItemList.length; i++) {
+        if (searchItemList[i]
             .toString()
             .toLowerCase()
             .contains(_searchText.toLowerCase())) {
-          tempList.add(widget.fratList[i]);
+          tempList.add(searchItemList[i]);
         }
       }
       filteredList = tempList;
@@ -175,26 +197,33 @@ class _DartySearchBarScreenState extends State<DartySearchBarScreen>
   }
 
   @override
+  // Similar to Sud, Maria converted this to a FutureBuilder
+  // Sud is a m a z i n g <3
+  // 12/19/20 *hug*
   Widget build(BuildContext context) {
 
     print(_searchText);
     print(filteredList);
 
-    return AnimatedContainer(
-      height: tapped
-          ? 60.0 * filteredList.length + AppBar().preferredSize.height + MediaQuery.of(context).padding.top
-          : AppBar().preferredSize.height + MediaQuery.of(context).padding.top,
-      child: SizedBox(
-        height: 60.0 * filteredList.length,
-        width: MediaQuery.of(context).size.width,
-        child: Scaffold(
-          appBar: _buildBar(context),
-          body: _buildList(),
-          backgroundColor: darkCornColor,
-          resizeToAvoidBottomPadding: false,
+    return FutureBuilder(
+      future: _setSearch(),
+      builder: (context, snapshot) {
+      return AnimatedContainer(
+        height: tapped
+            ? 60.0 * filteredList.length + AppBar().preferredSize.height + MediaQuery.of(context).padding.top
+            : AppBar().preferredSize.height + MediaQuery.of(context).padding.top,
+        child: SizedBox(
+          height: 60.0 * filteredList.length,
+          width: MediaQuery.of(context).size.width,
+          child: Scaffold(
+            appBar: _buildBar(context),
+            body: _buildList(),
+            backgroundColor: darkCornColor,
+            resizeToAvoidBottomPadding: false,
+          ),
         ),
-      ),
-      duration: Duration(milliseconds: 400),
-    );
+        duration: Duration(milliseconds: 400),
+      );
+    });
   }
 }

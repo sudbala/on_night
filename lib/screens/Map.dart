@@ -52,7 +52,6 @@ class _NightMapState extends State<NightMap> {
     Color openColor = Color(dataMap['OpenColor']);
     Color closeColor = Color(dataMap['ClosedColor']);
 
-
     // Convert GeoPoints to LatLngs to put inside a GreekSpace object
     List<LatLng> greekSpacePoints = List<LatLng>();
     for (dynamic point in points) {
@@ -127,7 +126,7 @@ class _NightMapState extends State<NightMap> {
                 tilt: 6,
               ),
             ),
-            DartySearchBarScreen(),
+            DartySearchBarScreen(type: "map"),
             Positioned(
               bottom: 60,
               right: 10,
