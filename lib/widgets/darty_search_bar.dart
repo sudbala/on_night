@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:on_night/model/GreekSpace.dart';
 import 'package:on_night/widgets/NavigationBarController.dart';
 import 'dart:collection';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -26,6 +27,8 @@ class _DartySearchBarScreenState extends State<DartySearchBarScreen>
   // list of common search terms (gdx, tri-kap, tabard; not the nicknames)
   // these are the ones visible in the UI
   List<String> searchItemList = List();
+  Set<String> querySet = Set();
+  HashMap<String, GreekSpace> queryGreekSpaces = HashMap<String, GreekSpace>();
 
   // Search text
   String _searchText = "";
@@ -61,12 +64,26 @@ class _DartySearchBarScreenState extends State<DartySearchBarScreen>
               element.docs.forEach((result) async {
                 dataMap = result.data();
                 // if we already have added this frat, don't do it again
-                if (searchItemList.contains(dataMap['Common Name'])) {
-                } else {
-                  searchItemList.add(dataMap['Common Name']);
-                }
+                GreekSpace greekSpace = GreekSpace(
+                  name: dataMap['Common Name'],
+                  commonNames: dataMap['OtherNames'],
+                );
+                queryGreekSpaces[greekSpace.fratName] = greekSpace;
+
+//                if (searchItemList.contains(dataMap['Common Name'])) {
+//                } else {
+//                  GreekSpace greekSpace = GreekSpace(
+//                    name: dataMap['Common Name'],
+//                    commonNames: dataMap['OtherNames'],
+//                  );
+//
+//                  searchItemList.add(dataMap['Common Name']);
+//                }
               })
             });
+    dataMap.forEach((key, value) {
+      searchItemList.add(key);
+    });
   }
 
   void _getList() async {

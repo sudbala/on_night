@@ -12,6 +12,12 @@ class GreekSpace {
     this.name = name;
   }
 
+  String commonNames;
+  String get otherNames => commonNames;
+  set otherNames(String commonNames) {
+    this.commonNames = commonNames;
+  }
+
   List<LatLng> points;
   List<LatLng> get fratPoints => points;
   set fratPoints(List<LatLng> points) {
@@ -25,11 +31,10 @@ class GreekSpace {
   }
 
   // Constructors
-  GreekSpace({this.name, this.points, this.colorSwitcher});
+  GreekSpace({this.name, this.points, this.colorSwitcher, this.commonNames});
 
   // toString
   String toString() {
     return this.name + " is " + this.colorSwitcher.getStatus().toString();
   }
-
 }
