@@ -68,21 +68,17 @@ class _DartySearchBarScreenState extends State<DartySearchBarScreen>
                   name: dataMap['Common Name'],
                   commonNames: dataMap['OtherNames'],
                 );
-                queryGreekSpaces[greekSpace.fratName] = greekSpace;
 
-//                if (searchItemList.contains(dataMap['Common Name'])) {
-//                } else {
-//                  GreekSpace greekSpace = GreekSpace(
-//                    name: dataMap['Common Name'],
-//                    commonNames: dataMap['OtherNames'],
-//                  );
-//
-//                  searchItemList.add(dataMap['Common Name']);
-//                }
+                /// Add to the queryGreekSpace map to use for common name
+                /// searching
+                queryGreekSpaces[greekSpace.fratName] = greekSpace;
               })
             });
-    dataMap.forEach((key, value) {
-      searchItemList.add(key);
+
+    queryGreekSpaces.forEach((key, value) {
+      if (!searchItemList.contains(key)) {
+        searchItemList.add(key);
+      }
     });
   }
 
@@ -171,6 +167,7 @@ class _DartySearchBarScreenState extends State<DartySearchBarScreen>
                       setState(() {
                         DartySearchBarScreen.tapped = false;
                         FocusScope.of(context).unfocus();
+                        _filter.clear();
                       });
                     })
                 : SvgPicture.asset('assets/settings_gear.svg',
@@ -182,17 +179,19 @@ class _DartySearchBarScreenState extends State<DartySearchBarScreen>
   }
 
   Widget _buildList() {
-
-
     // Build the filtered list of things we want to display
     // If searchText is not empty
     if (_searchText.length != 0) {
       List tempList = List();
       for (int i = 0; i < searchItemList.length; i++) {
         if (searchItemList[i]
-            .toString()
-            .toLowerCase()
-            .contains(_searchText.toLowerCase())) {
+                .toString()
+                .toLowerCase()
+                .contains(_searchText.toLowerCase()) ||
+            queryGreekSpaces[searchItemList[i]]
+                .otherNames
+                .toLowerCase()
+                .contains(_searchText.toLowerCase())) {
           tempList.add(searchItemList[i]);
         }
       }
