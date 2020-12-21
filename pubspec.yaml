@@ -62,6 +62,12 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_launcher_icons: ^0.8.1
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/icon/icon_blue_corn.png"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -99,6 +105,7 @@ flutter:
     - assets/strawberry.jpg
     - assets/animations/
     - assets/maria_profile_pic.jpg
+    - assets/images/icon/icon.png
 
 
   # assets:

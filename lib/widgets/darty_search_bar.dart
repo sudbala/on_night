@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:on_night/model/GreekSpace.dart';
 import 'package:on_night/widgets/NavigationBarController.dart';
 import 'dart:collection';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class DartySearchBarScreen extends StatefulWidget {
-
   // this stores what type of search bar we need, for now the only option is map
   // in the future, this may be friends or other data types
   // trying to make it modularizable :)
 
   final String type;
+  static bool tapped = false;
   // passed in from calling screen
   DartySearchBarScreen({this.type});
 
@@ -22,11 +23,12 @@ class _DartySearchBarScreenState extends State<DartySearchBarScreen>
     with TickerProviderStateMixin {
   // Text editing controller for the text field
   final TextEditingController _filter = TextEditingController();
-  bool tapped = false;
 
   // list of common search terms (gdx, tri-kap, tabard; not the nicknames)
   // these are the ones visible in the UI
   List<String> searchItemList = List();
+  Set<String> querySet = Set();
+  HashMap<String, GreekSpace> queryGreekSpaces = HashMap<String, GreekSpace>();
 
   // Search text
   String _searchText = "";
@@ -59,17 +61,30 @@ class _DartySearchBarScreenState extends State<DartySearchBarScreen>
         .collection('GreekSpaces')
         .get()
         .then((element) => {
-      element.docs.forEach((result) async {
-        dataMap = result.data();
-        // if we already have added this frat, don't do it again
-        if (searchItemList.contains(dataMap['Common Name'])){
-        } else {
-          searchItemList.add(dataMap['Common Name']);
-        }
-      })
+              element.docs.forEach((result) async {
+                dataMap = result.data();
+                // if we already have added this frat, don't do it again
+                GreekSpace greekSpace = GreekSpace(
+                  name: dataMap['Common Name'],
+                  commonNames: dataMap['OtherNames'],
+                );
+                queryGreekSpaces[greekSpace.fratName] = greekSpace;
+
+//                if (searchItemList.contains(dataMap['Common Name'])) {
+//                } else {
+//                  GreekSpace greekSpace = GreekSpace(
+//                    name: dataMap['Common Name'],
+//                    commonNames: dataMap['OtherNames'],
+//                  );
+//
+//                  searchItemList.add(dataMap['Common Name']);
+//                }
+              })
+            });
+    dataMap.forEach((key, value) {
+      searchItemList.add(key);
     });
   }
-
 
   void _getList() async {
     setState(() {
@@ -121,12 +136,12 @@ class _DartySearchBarScreenState extends State<DartySearchBarScreen>
                   child: TextField(
                     onTap: () {
                       setState(() {
-                        tapped = true;
+                        DartySearchBarScreen.tapped = true;
                       });
                     },
                     onSubmitted: (value) {
                       setState(() {
-                        tapped = false;
+                        DartySearchBarScreen.tapped = false;
                       });
                     },
                     controller: _filter,
@@ -149,12 +164,13 @@ class _DartySearchBarScreenState extends State<DartySearchBarScreen>
           Spacer(flex: 1),
           Container(
             height: AppBar().preferredSize.height,
-            child: tapped
+            child: DartySearchBarScreen.tapped
                 ? CloseButton(
                     color: Colors.white70,
                     onPressed: () {
                       setState(() {
-                        tapped = false;
+                        DartySearchBarScreen.tapped = false;
+                        FocusScope.of(context).unfocus();
                       });
                     })
                 : SvgPicture.asset('assets/settings_gear.svg',
@@ -166,6 +182,8 @@ class _DartySearchBarScreenState extends State<DartySearchBarScreen>
   }
 
   Widget _buildList() {
+
+
     // Build the filtered list of things we want to display
     // If searchText is not empty
     if (_searchText.length != 0) {
@@ -201,29 +219,31 @@ class _DartySearchBarScreenState extends State<DartySearchBarScreen>
   // Sud is a m a z i n g <3
   // 12/19/20 *hug*
   Widget build(BuildContext context) {
-
     print(_searchText);
     print(filteredList);
 
     return FutureBuilder(
-      future: _setSearch(),
-      builder: (context, snapshot) {
-      return AnimatedContainer(
-        height: tapped
-            ? 60.0 * filteredList.length + AppBar().preferredSize.height + MediaQuery.of(context).padding.top
-            : AppBar().preferredSize.height + MediaQuery.of(context).padding.top,
-        child: SizedBox(
-          height: 60.0 * filteredList.length,
-          width: MediaQuery.of(context).size.width,
-          child: Scaffold(
-            appBar: _buildBar(context),
-            body: _buildList(),
-            backgroundColor: darkCornColor,
-            resizeToAvoidBottomPadding: false,
-          ),
-        ),
-        duration: Duration(milliseconds: 400),
-      );
-    });
+        future: _setSearch(),
+        builder: (context, snapshot) {
+          return AnimatedContainer(
+            height: DartySearchBarScreen.tapped
+                ? 60.0 * filteredList.length +
+                    AppBar().preferredSize.height +
+                    MediaQuery.of(context).padding.top
+                : AppBar().preferredSize.height +
+                    MediaQuery.of(context).padding.top,
+            child: SizedBox(
+              height: 60.0 * filteredList.length,
+              width: MediaQuery.of(context).size.width,
+              child: Scaffold(
+                appBar: _buildBar(context),
+                body: _buildList(),
+                backgroundColor: darkCornColor,
+                resizeToAvoidBottomPadding: false,
+              ),
+            ),
+            duration: Duration(milliseconds: 400),
+          );
+        });
   }
 }

@@ -29,9 +29,9 @@ class _NightMapState extends State<NightMap> {
   @override
   void initState() {
     // Get the style into a string
-    rootBundle.loadString('assets/map_style.json').then((style) => {
-      _mapStyle = style
-    });
+    rootBundle
+        .loadString('assets/map_style.json')
+        .then((style) => {_mapStyle = style});
   }
 
   // When the map is created, we set the map's style.
@@ -44,7 +44,8 @@ class _NightMapState extends State<NightMap> {
   }
 
   // Initializes the map of GreekSpaces from the databases
-  void initializeGreekSpaceMap(String docID, Map<String, dynamic> dataMap) async {
+  void initializeGreekSpaceMap(
+      String docID, Map<String, dynamic> dataMap) async {
     // Grab all data from the database: the list of points for a frat, the open
     // color, the closed color, whether it is open
     List<dynamic> points = dataMap['Points'];
@@ -60,11 +61,9 @@ class _NightMapState extends State<NightMap> {
 
     // Add all data to a GreekSpace object and then to greek space map
     greekSpaceMap[docID] = GreekSpace(
-      name: docID,
-      points: greekSpacePoints,
-      colorSwitcher: ColorSwitcher(openColor, closeColor, open)
-    );
-
+        name: docID,
+        points: greekSpacePoints,
+        colorSwitcher: ColorSwitcher(openColor, closeColor, open));
   }
 
   // The future of the Map. We want to set the polygons before we make the map
@@ -79,12 +78,13 @@ class _NightMapState extends State<NightMap> {
         .collection('GreekSpaces')
         .get()
         .then((element) => {
-          element.docs.forEach((result) async {
-            dataMap = result.data();
-            initializeGreekSpaceMap(result.id, dataMap);
-          })
-        });
+              element.docs.forEach((result) async {
+                dataMap = result.data();
+                initializeGreekSpaceMap(result.id, dataMap);
+              })
+            });
 
+    print("the size of polygons: " + _fratPolygons.length.toString());
     // Create the polygons
     for (GreekSpace greekSpace in greekSpaceMap.values) {
       // Create a polygon
@@ -92,7 +92,8 @@ class _NightMapState extends State<NightMap> {
         geodesic: true,
         polygonId: PolygonId(greekSpace.name),
         points: greekSpace.points,
-        fillColor:  greekSpace.colorSwitcher.getStatusColor()
+        fillColor: greekSpace.colorSwitcher
+            .getStatusColor()
             .withOpacity(greekSpace.colorSwitcher.getOpacity()),
         strokeColor: greekSpace.colorSwitcher.getStatusColor().withOpacity(0.8),
         strokeWidth: 2,
@@ -108,35 +109,49 @@ class _NightMapState extends State<NightMap> {
     // Sud learned about FutureBuilder!!! Maria will be proud of sud!
     // Maria is proud of sud! omg! :) <3 8/5/20
     bool tapped = false;
+    bool _isVisible = false;
 
     return FutureBuilder(
         future: _setPolygons(),
         builder: (context, snapshot) {
-          return Stack(children: <Widget>[
-            GoogleMap(
-              padding: EdgeInsets.only(bottom: mapBottomPadding, top: 0, right: 0, left: 0),
-              compassEnabled: false,
-              onMapCreated: _onMapCreated,
-              buildingsEnabled: false,
-              zoomControlsEnabled: false,
-              polygons: _fratPolygons,
-              initialCameraPosition: CameraPosition(
-                target: LatLng(43.704871, -72.288735),
-                zoom: 17,
-                tilt: 6,
+          return GestureDetector(
+            onTap: () {
+              setState(() {
+                FocusScope.of(context).requestFocus(FocusNode());
+                DartySearchBarScreen.tapped = false;
+              });
+            },
+            child: Stack(children: <Widget>[
+              GoogleMap(
+                padding: EdgeInsets.only(
+                    bottom: mapBottomPadding, top: 0, right: 0, left: 0),
+                compassEnabled: false,
+                onMapCreated: _onMapCreated,
+                buildingsEnabled: false,
+                zoomControlsEnabled: false,
+                polygons: _fratPolygons,
+                initialCameraPosition: CameraPosition(
+                  target: LatLng(43.704871, -72.288735),
+                  zoom: 17,
+                  tilt: 6,
+                ),
               ),
-            ),
-            DartySearchBarScreen(type: "map"),
-            Positioned(
-              bottom: 60,
-              right: 10,
-              child: FloatingActionButton(
-                child: Icon(Icons.refresh),
-                onPressed: _updateFrats,
-                backgroundColor: Color(0xff992181),
+              Visibility(
+                visible: _isVisible,
+                child: Placeholder(),
               ),
-            ),
-          ]);
+              DartySearchBarScreen(type: "map"),
+              Positioned(
+                bottom: 60,
+                right: 10,
+                child: FloatingActionButton(
+                  child: Icon(Icons.refresh),
+                  onPressed: _updateFrats,
+                  backgroundColor: Color(0xff992181),
+                ),
+              ),
+            ]),
+          );
         });
   }
 
