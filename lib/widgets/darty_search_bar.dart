@@ -271,18 +271,21 @@ class _DartySearchBarScreenState extends State<DartySearchBarScreen>
             alignment: Alignment.topCenter,
             children: [
               /// Use an [AnimatedOpacity] to show when tapped.
-              AnimatedOpacity(
-                /// If the widget is visible, animate to 0.0 (invisible)
-                /// if the widget is hidden, animate to 1.0 (fully visible)
-                opacity: _visible ? 1.0 : 0.0,
-                duration: Duration(milliseconds: 30),
-                child: BackdropFilter(
-                  filter: ImageFilter.blur(
-                    sigmaX: 5,
-                    sigmaY: 5,
-                  ),
-                  child: Container(
-                    color: Colors.black.withOpacity(0.1),
+              Visibility(
+                visible: _visible,
+                child: AnimatedOpacity(
+                  /// If the widget is visible, animate to 0.0 (invisible)
+                  /// if the widget is hidden, animate to 1.0 (fully visible)
+                  opacity: _visible ? 1.0 : 0.0,
+                  duration: Duration(milliseconds: 30),
+                  child: BackdropFilter(
+                    filter: ImageFilter.blur(
+                      sigmaX: 5,
+                      sigmaY: 5,
+                    ),
+                    child: Container(
+                      color: Colors.black.withOpacity(0.1),
+                    ),
                   ),
                 ),
               ),

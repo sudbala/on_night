@@ -57,6 +57,13 @@ class _NavigationBarControllerState extends State<NavigationBarController> {
   /// Selected Index of page
   int _selectedIndex = 2;
 
+
+  @override
+  void initState() {
+    _selectedIndex = 2;
+    super.initState();
+  }
+
   /// The navigationBar Widget, which is really our CurvedNavigationBar
   Widget _navigationBar(int selectedIndex) => CurvedNavigationBar(
         height: 50,
