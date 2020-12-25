@@ -55,7 +55,14 @@ class _NavigationBarControllerState extends State<NavigationBarController> {
   final PageStorageBucket bucket = PageStorageBucket();
 
   /// Selected Index of page
-  int _selectedIndex = 0;
+  int _selectedIndex = 2;
+
+
+  @override
+  void initState() {
+    _selectedIndex = 2;
+    super.initState();
+  }
 
   /// The navigationBar Widget, which is really our CurvedNavigationBar
   Widget _navigationBar(int selectedIndex) => CurvedNavigationBar(
