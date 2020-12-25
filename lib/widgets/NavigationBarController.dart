@@ -104,12 +104,12 @@ class _NavigationBarControllerState extends State<NavigationBarController> {
         resizeToAvoidBottomInset: false,
         body: Stack(
           children: <Widget>[
-            PageStorage(
-              child: AnimatedSwitcher(
-                duration: const Duration(milliseconds: 1000),
-                child: pages[_selectedIndex],
+            AnimatedSwitcher(
+              duration: const Duration(milliseconds: 1000),
+              child: IndexedStack(
+                index: _selectedIndex,
+                children: pages,
               ),
-              bucket: bucket,
             ),
             Align(
               alignment: Alignment.bottomCenter,
