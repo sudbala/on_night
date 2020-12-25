@@ -126,12 +126,15 @@ class CurvedNavigationBarState extends State<CurvedNavigationBar>
                 ),
                 child: ClipOval(
                     child: SizedBox(
-                      height: 50,
-                      width: 50,
+                      height: 55,
+                      width: 55,
                       child: Stack(
                         children: <Widget>[
-                          _icon,
-                          AnimatedGradientButton(),
+                          AnimatedGradient(),
+                          Align(
+                            alignment: Alignment.center,
+                              child: _icon
+                          ),
                         ]
 
                       ),

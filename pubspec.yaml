@@ -36,7 +36,6 @@ dependencies:
   curved_navigation_bar: ^0.3.3 #latest version
   flappy_search_bar: 1.7.2
   flutter_hooks: 0.15.0
-  simple_animations: ^2.2.1
   google_fonts: ^1.1.0
 
   # The core of firebase fire plugin
@@ -54,6 +53,7 @@ dependencies:
   rxdart: ^0.24.1
   rive: ^0.6.3
   flare_flutter: ^2.0.6
+  simple_animations: ^2.4.2
 
   # need for accessing location 12/2/2020
   permission: ^0.1.7
