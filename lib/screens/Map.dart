@@ -1,4 +1,5 @@
 import 'dart:collection';
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -109,7 +110,7 @@ class _NightMapState extends State<NightMap> {
     // Sud learned about FutureBuilder!!! Maria will be proud of sud!
     // Maria is proud of sud! omg! :) <3 8/5/20
     bool tapped = false;
-    bool _isVisible = false;
+    bool _visible = false;
 
     return FutureBuilder(
         future: _setPolygons(),
@@ -136,11 +137,6 @@ class _NightMapState extends State<NightMap> {
                   tilt: 6,
                 ),
               ),
-              Visibility(
-                visible: _isVisible,
-                child: Placeholder(),
-              ),
-              DartySearchBarScreen(type: "map"),
               Positioned(
                 bottom: 60,
                 right: 10,
@@ -150,6 +146,7 @@ class _NightMapState extends State<NightMap> {
                   backgroundColor: Color(0xff992181),
                 ),
               ),
+              DartySearchBarScreen(type: "map"),
             ]),
           );
         });

@@ -32,6 +32,7 @@ class _DartySearchBarScreenState extends State<DartySearchBarScreen>
   List<String> searchItemList = List();
   Set<String> querySet = Set();
   HashMap<String, GreekSpace> queryGreekSpaces = HashMap<String, GreekSpace>();
+  bool _visible = false;
 
   // Search text
   String _searchText = "";
@@ -139,11 +140,13 @@ class _DartySearchBarScreenState extends State<DartySearchBarScreen>
                     onTap: () {
                       setState(() {
                         DartySearchBarScreen.tapped = true;
+                        _visible = true;
                       });
                     },
                     onSubmitted: (value) {
                       setState(() {
                         DartySearchBarScreen.tapped = false;
+                        _visible = false;
                       });
                     },
                     controller: _filter,
@@ -172,6 +175,7 @@ class _DartySearchBarScreenState extends State<DartySearchBarScreen>
                     onPressed: () {
                       setState(() {
                         DartySearchBarScreen.tapped = false;
+                        _visible = false;
                         FocusScope.of(context).unfocus();
                         _filter.clear();
                       });
@@ -239,8 +243,7 @@ class _DartySearchBarScreenState extends State<DartySearchBarScreen>
                       ),
                     ),
                   ),
-                  title: Text(
-                      filteredList[index],
+                  title: Text(filteredList[index],
                       style: GoogleFonts.comfortaa(color: Colors.white)),
                   onTap: () {
                     Navigator.push(context,
@@ -264,24 +267,45 @@ class _DartySearchBarScreenState extends State<DartySearchBarScreen>
     return FutureBuilder(
         future: _setSearch(),
         builder: (context, snapshot) {
-          return AnimatedContainer(
-            height: DartySearchBarScreen.tapped
-                ? 65.0 * filteredList.length +
-                    AppBar().preferredSize.height +
-                    MediaQuery.of(context).padding.top
-                : AppBar().preferredSize.height +
-                    MediaQuery.of(context).padding.top,
-            child: SizedBox(
-              height: 65.0 * filteredList.length,
-              width: MediaQuery.of(context).size.width,
-              child: Scaffold(
-                appBar: _buildBar(context),
-                body: _buildList(),
-                backgroundColor: Colors.transparent,
-                resizeToAvoidBottomPadding: false,
+          return Stack(
+            alignment: Alignment.topCenter,
+            children: [
+              /// Use an [AnimatedOpacity] to show when tapped.
+              AnimatedOpacity(
+                /// If the widget is visible, animate to 0.0 (invisible)
+                /// if the widget is hidden, animate to 1.0 (fully visible)
+                opacity: _visible ? 1.0 : 0.0,
+                duration: Duration(milliseconds: 30),
+                child: BackdropFilter(
+                  filter: ImageFilter.blur(
+                    sigmaX: 5,
+                    sigmaY: 5,
+                  ),
+                  child: Container(
+                    color: Colors.black.withOpacity(0.1),
+                  ),
+                ),
               ),
-            ),
-            duration: Duration(milliseconds: 200),
+              AnimatedContainer(
+                height: DartySearchBarScreen.tapped
+                    ? 65.0 * filteredList.length +
+                        AppBar().preferredSize.height +
+                        MediaQuery.of(context).padding.top
+                    : AppBar().preferredSize.height +
+                        MediaQuery.of(context).padding.top,
+                child: SizedBox(
+                  height: 65.0 * filteredList.length,
+                  width: MediaQuery.of(context).size.width,
+                  child: Scaffold(
+                    appBar: _buildBar(context),
+                    body: _buildList(),
+                    backgroundColor: Colors.transparent,
+                    resizeToAvoidBottomPadding: false,
+                  ),
+                ),
+                duration: Duration(milliseconds: 200),
+              ),
+            ],
           );
         });
   }
