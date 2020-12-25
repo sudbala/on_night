@@ -106,6 +106,12 @@ flutter:
     - assets/animations/
     - assets/maria_profile_pic.jpg
     - assets/images/icon/icon.png
+    - assets/fratphotos/open/GDX.png
+    - assets/fratphotos/open/Tri Kap.png
+    - assets/fratphotos/open/The Tabard.png
+    - assets/fratphotos/closed/GDX.png
+    - assets/fratphotos/closed/Tri Kap.png
+    - assets/fratphotos/closed/The Tabard.png
 
 
   # assets:
