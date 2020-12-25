@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:on_night/model/GreekSpace.dart';
 import 'package:on_night/widgets/NavigationBarController.dart';
+import 'dart:ui';
 import 'dart:collection';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:on_night/model/ColorSwitcher.dart';
 
 class DartySearchBarScreen extends StatefulWidget {
   // this stores what type of search bar we need, for now the only option is map
@@ -63,11 +66,14 @@ class _DartySearchBarScreenState extends State<DartySearchBarScreen>
         .then((element) => {
               element.docs.forEach((result) async {
                 dataMap = result.data();
+                bool open = dataMap['Open'];
+                Color openColor = Color(dataMap['OpenColor']);
+                Color closeColor = Color(dataMap['ClosedColor']);
                 // if we already have added this frat, don't do it again
                 GreekSpace greekSpace = GreekSpace(
-                  name: dataMap['Common Name'],
-                  commonNames: dataMap['OtherNames'],
-                );
+                    colorSwitcher: ColorSwitcher(openColor, closeColor, open),
+                    name: dataMap['Common Name'],
+                    commonNames: dataMap['OtherNames']);
 
                 /// Add to the queryGreekSpace map to use for common name
                 /// searching
@@ -199,18 +205,52 @@ class _DartySearchBarScreenState extends State<DartySearchBarScreen>
     }
 
     return ListView.builder(
-      itemCount: filteredList.length,
-      itemBuilder: (context, index) {
-        return ListTile(
-          title:
-              Text(filteredList[index], style: TextStyle(color: Colors.white)),
-          onTap: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => Placeholder()));
-          },
-        );
-      },
-    );
+        itemCount: filteredList.length,
+        itemBuilder: (context, index) {
+          return Card(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(20.0))),
+            margin:
+                EdgeInsets.only(left: 20.0, right: 20.0, top: 5.0, bottom: 5.0),
+            color: Colors.white30,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                ListTile(
+                  leading: Transform.translate(
+                    offset: Offset(-7, 0),
+                    child: Container(
+                      height: 40,
+                      width: 40,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: queryGreekSpaces[filteredList[index]]
+                                  .colorSwitcher
+                                  .status
+                              ? AssetImage('assets/fratphotos/open/' +
+                                  filteredList[index] +
+                                  '.png')
+                              : AssetImage('assets/fratphotos/closed/' +
+                                  filteredList[index] +
+                                  '.png'),
+                          fit: BoxFit.cover,
+                        ),
+                        borderRadius: BorderRadius.circular(13.3),
+                      ),
+                    ),
+                  ),
+                  title: Text(
+                      filteredList[index],
+                      style: GoogleFonts.comfortaa(color: Colors.white)),
+                  onTap: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => Placeholder()));
+                  },
+                )
+              ],
+            ),
+          );
+        });
   }
 
   @override
@@ -226,22 +266,22 @@ class _DartySearchBarScreenState extends State<DartySearchBarScreen>
         builder: (context, snapshot) {
           return AnimatedContainer(
             height: DartySearchBarScreen.tapped
-                ? 60.0 * filteredList.length +
+                ? 65.0 * filteredList.length +
                     AppBar().preferredSize.height +
                     MediaQuery.of(context).padding.top
                 : AppBar().preferredSize.height +
                     MediaQuery.of(context).padding.top,
             child: SizedBox(
-              height: 60.0 * filteredList.length,
+              height: 65.0 * filteredList.length,
               width: MediaQuery.of(context).size.width,
               child: Scaffold(
                 appBar: _buildBar(context),
                 body: _buildList(),
-                backgroundColor: darkCornColor,
+                backgroundColor: Colors.transparent,
                 resizeToAvoidBottomPadding: false,
               ),
             ),
-            duration: Duration(milliseconds: 400),
+            duration: Duration(milliseconds: 200),
           );
         });
   }
