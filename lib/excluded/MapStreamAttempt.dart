@@ -28,7 +28,7 @@ class _NightMapState extends State<NightMap> {
   double mapBottomPadding = 0;
 
   CollectionReference greekSpaces =
-      FirebaseFirestore.instance.collection('GreekSpaces');
+  FirebaseFirestore.instance.collection('GreekSpaces');
 
   @override
   void initState() {
@@ -82,11 +82,11 @@ class _NightMapState extends State<NightMap> {
         .collection('GreekSpaces')
         .get()
         .then((element) => {
-              element.docs.forEach((result) async {
-                dataMap = result.data();
-                initializeGreekSpaceMap(result.id, dataMap);
-              })
-            });
+      element.docs.forEach((result) async {
+        dataMap = result.data();
+        initializeGreekSpaceMap(result.id, dataMap);
+      })
+    });
 
     print("the size of polygons: " + _fratPolygons.length.toString());
     // Create the polygons
@@ -108,16 +108,74 @@ class _NightMapState extends State<NightMap> {
     greekSpaceMap.clear();
   }
 
+  GreekSpace createFrat(String frat, Map<String, dynamic> dataMap) {
+    /// Grab all data from the database: the list of points for a frat, the open
+    /// color, the closed color, whether it is open
+    List<dynamic> points = dataMap['Points'];
+    bool open = dataMap['Open'];
+    Color openColor = Color(dataMap['OpenColor']);
+    Color closeColor = Color(dataMap['ClosedColor']);
 
+    /// Convert GeoPoints to LatLngs to put inside a GreekSpace object
+    List<LatLng> greekSpacePoints = List<LatLng>();
+    for (dynamic point in points) {
+      greekSpacePoints.add(LatLng(point.latitude, point.longitude));
+    }
+
+    /// Add all data to a GreekSpace object and then to greek space map
+    return GreekSpace(
+      name: frat,
+      points: greekSpacePoints,
+      colorSwitcher: ColorSwitcher(openColor, closeColor, open),
+    );
+  }
+
+  void loadPolygonForFrat(String frat) async {
+    /// Map to use store the data for a singular frat.
+    /// DocumentReference for the the current frat so that we can grab data
+    DocumentReference fratDocRef = greekSpaces.doc(frat);
+
+    /// Now get the data from the fratDocRef. Remember to use await to get the
+    /// future to go away. Then create a frat for that docSnap
+    DocumentSnapshot fratDocSnap = await fratDocRef.get();
+    GreekSpace currentFrat = createFrat(frat, fratDocSnap.data());
+
+    /// Now we need to create a polygon
+    Polygon greekSpacePolygon = Polygon(
+      geodesic: true,
+      polygonId: PolygonId(currentFrat.name),
+      points: currentFrat.points,
+      fillColor: currentFrat.colorSwitcher
+          .getStatusColor()
+          .withOpacity(currentFrat.colorSwitcher.getOpacity()),
+      strokeColor: currentFrat.colorSwitcher.getStatusColor().withOpacity(0.8),
+      strokeWidth: 2,
+    );
+    // Now we add the polygon to the fratPolygons
+    _fratPolygons.add(greekSpacePolygon);
+
+  }
+
+
+  void loadFrats(List frats) {
+    frats.forEach((frat) {
+      loadPolygonForFrat(frat);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     // Sud learned about FutureBuilder!!! Maria will be proud of sud!
     // Maria is proud of sud! omg! :) <3 8/5/20
 
-    return FutureBuilder(
-        future: _setPolygons(),
+    return StreamBuilder(
+        stream: greekSpaces.snapshots(),
         builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            loadFrats(snapshot.data.documents.map((DocumentSnapshot document) {
+              return document.id;
+            }).toList());
+          }
           return GestureDetector(
             onTap: () {
               setState(() {
@@ -140,19 +198,61 @@ class _NightMapState extends State<NightMap> {
                   tilt: 6,
                 ),
               ),
-              Positioned(
-                bottom: 60,
-                right: 10,
-                child: FloatingActionButton(
-                  child: Icon(Icons.refresh),
-                  onPressed: _updateFrats,
-                  backgroundColor: Color(0xff992181),
-                ),
-              ),
+//              Positioned(
+//                bottom: 60,
+//                right: 10,
+//                child: FloatingActionButton(
+//                  child: Icon(Icons.refresh),
+//                  onPressed: _updateFrats,
+//                  backgroundColor: Color(0xff992181),
+//                ),
+//              ),
               DartySearchBarScreen(type: "map"),
             ]),
           );
-        });
+        }
+    );
+
+
+
+//    return FutureBuilder(
+//        future: _setPolygons(),
+//        builder: (context, snapshot) {
+//          return GestureDetector(
+//            onTap: () {
+//              setState(() {
+//                FocusScope.of(context).requestFocus(FocusNode());
+//                DartySearchBarScreen.tapped = false;
+//              });
+//            },
+//            child: Stack(children: <Widget>[
+//              GoogleMap(
+//                padding: EdgeInsets.only(
+//                    bottom: mapBottomPadding, top: 0, right: 0, left: 0),
+//                compassEnabled: false,
+//                onMapCreated: _onMapCreated,
+//                buildingsEnabled: false,
+//                zoomControlsEnabled: false,
+//                polygons: _fratPolygons,
+//                initialCameraPosition: CameraPosition(
+//                  target: LatLng(43.704871, -72.288735),
+//                  zoom: 17,
+//                  tilt: 6,
+//                ),
+//              ),
+//              Positioned(
+//                bottom: 60,
+//                right: 10,
+//                child: FloatingActionButton(
+//                  child: Icon(Icons.refresh),
+//                  onPressed: _updateFrats,
+//                  backgroundColor: Color(0xff992181),
+//                ),
+//              ),
+//              DartySearchBarScreen(type: "map"),
+//            ]),
+//          );
+//        });
   }
 
   Future<void> _updateFrats() async {
