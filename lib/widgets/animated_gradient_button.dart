@@ -2,60 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:simple_animations/simple_animations.dart';
 import 'package:supercharged/supercharged.dart';
 
-class AnimatedGradientButton extends StatefulWidget {
-  AnimatedGradientButton({Key key, this.title}) : super(key: key);
-  final String title;
-
-  @override
-  _AnimatedGradientButtonState createState() => _AnimatedGradientButtonState();
-}
-
-class _AnimatedGradientButtonState extends State<AnimatedGradientButton> with SingleTickerProviderStateMixin {
-  AnimationController animationController;
-  Animation animation;
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    animationController = AnimationController(
-        vsync: this, duration: Duration(milliseconds: 2500));
-    animationController.repeat(reverse: true);
-    animation = Tween(begin: 0.0, end: 1.0).animate(animationController)
-      ..addListener(() {
-        setState(() {
-
-        });
-      });
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    //startAnim();
-    return Scaffold(
-
-      body: Center(
-          child: Container(
-            decoration: BoxDecoration(
-                gradient: RadialGradient(
-                    center: Alignment(animation.value, animation.value),
-                    focal: Alignment(1.5, -animation.value + 0.6),
-                    focalRadius: 1.5,
-                    colors: [
-                      Color(0xffFFF250),
-                      Color(0xffF77939),
-                      Color(0xffF15F53),
-                      Color(0xffDD2C83),
-                      Color(0xffC12883),
-                      Color(0xff992191),
-                      Color(0xff7E1DA1),
-                    ])
-            ),
-          )
-      ),
-    );
-  }
-}
 
 enum _BgProps { color1, color2, color3, color4, color5, color6, color7 }
 
@@ -65,7 +11,7 @@ class AnimatedGradient extends StatelessWidget {
     /// The way i'm thinking about this is we create a simple gradient with a few
     /// colors and then use a package like hooks or simple_animations to tweak it
     /// In animation, inbetweening or tweening is a key process of generating
-    /// intermediate frames betwen two key frames to give the appearance that the
+    /// intermediate frames between two key frames to give the appearance that the
     /// first frame evolves smoothly into the second. I think we can use a
     /// [MultiTrackTween] (a tween that allows tweening of multiple properties
     /// at once) with a [ControlledAnimation) (widget to run tween based
